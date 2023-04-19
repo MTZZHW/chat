@@ -1,5 +1,6 @@
 import React from 'react';
 import type { ChatCompletionRequestMessageRoleEnum } from 'openai';
+import ReactMarkdown from 'react-markdown';
 
 type MessageProps = {
   role: ChatCompletionRequestMessageRoleEnum;
@@ -17,7 +18,11 @@ function Message({ role, content }: MessageProps) {
         marginBottom: 16,
       }}
       >
-        {content}
+        {
+          role === 'user'
+            ? <div style={{ whiteSpace: 'pre-wrap' }}><p>{content}</p></div>
+            : <ReactMarkdown>{content}</ReactMarkdown>
+        }
       </div>
     </div>
   );

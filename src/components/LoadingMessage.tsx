@@ -26,7 +26,7 @@ function Message() {
         marginBottom: 16,
       }}
       >
-        {loadingText}
+        <p>{loadingText}</p>
       </div>
     </div>
   );

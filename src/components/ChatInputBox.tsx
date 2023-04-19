@@ -30,7 +30,10 @@ function ChatInputBox({ sx, onSubmit, disabledSubmit }: ChatInputBoxProps) {
         multiline
         maxRows={10}
         value={chatContent}
-        onChange={(event) => setChatContent(event.target.value)}
+        onChange={(event) => {
+          console.log('event.target.value', event.target.value);
+          setChatContent(event.target.value);
+        }}
       />
       <Box sx={{ display: 'flex', alignItems: 'flex-end', height: '100%' }}>
         <IconButton type="submit" sx={{ ml: '8px' }} disabled={disabledSubmit}>
