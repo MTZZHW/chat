@@ -62,7 +62,7 @@ export default function Home() {
     }}
     >
       <div style={{
-        display: 'flex', flexDirection: 'column', width: '100%',
+        display: 'flex', flexDirection: 'column', width: '100%', marginBottom: 88,
       }}
       >
         {
@@ -105,7 +105,7 @@ export default function Home() {
         }
       </div>
       <div style={{
-        position: 'fixed', bottom: 0, right: 480, left: 480, background: '#ffffff', padding: '16px 0',
+        position: 'fixed', bottom: 0, right: 480, left: 480, background: '#ffffff', padding: '16px 0', height: 56,
       }}
       >
         <div style={{
