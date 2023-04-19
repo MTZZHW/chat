@@ -5,6 +5,6 @@
   },
   "rules": {
     "@typescript-eslint/consistent-type-imports": "warn",
-    "max-len": ["warn", { "code": 200 }]
+    "max-len": ["warn", { "code": 150 }]
   }
 }
