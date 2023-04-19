@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import type { ChatCompletionRequestMessage } from 'openai';
 import { Configuration, OpenAIApi } from 'openai';
-import { Box, Button, TextField } from '@mui/material';
-import SendIcon from '@mui/icons-material/Send';
+import { Box } from '@mui/material';
 import Message from '@/components/Message';
 import LoadingMessage from '@/components/LoadingMessage';
+import ChatInputBox from '@/components/ChatInputBox';
 
 const configuration = new Configuration({
   apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
@@ -14,14 +14,13 @@ const openai = new OpenAIApi(configuration);
 export default function Home() {
   const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
   const [send, setSend] = useState<boolean>(false);
-  const [textValue, setTextValue] = useState<string>('');
 
-  const sendConversationRequest = async () => {
+  const sendConversationRequest = async (chatContent: string) => {
     const newMessages: ChatCompletionRequestMessage[] = [
       ...messages,
       {
         role: 'user',
-        content: textValue,
+        content: chatContent,
       },
     ];
 
@@ -39,7 +38,6 @@ export default function Home() {
         completion.data.choices[0].message,
       ];
       setMessages(updatedMessages);
-      setTextValue('');
     }
     setSend(false);
   };
@@ -69,44 +67,30 @@ export default function Home() {
         }
         </div>
       </Box>
-      <Box sx={{
-        position: 'fixed',
-        bottom: 0,
-        background: '#ffffff',
-        padding: '16px 0',
-        height: 56,
-        right: {
-          xs: '14px',
-          sm: '10vw',
-          md: '16vw',
-          lg: '25vw',
-        },
-        left: {
-          xs: '14px',
-          sm: '10vw',
-          md: '16vw',
-          lg: '25vw',
-        },
-        display: 'flex',
-        alignItems: 'flex-end',
-      }}
-      >
-        <TextField
-          multiline
-          value={textValue}
-          onChange={(event) => setTextValue(event.target.value)}
-          style={{ width: '100%' }}
-        />
-        <Button
-          variant="contained"
-          endIcon={<SendIcon />}
-          onClick={sendConversationRequest}
-          style={{ marginLeft: 8 }}
-          disabled={send}
-        >
-          Send
-        </Button>
-      </Box>
+      <ChatInputBox
+        sx={{
+          p: '12px 4px',
+          mb: '12px',
+          display: 'flex',
+          alignItems: 'center',
+          position: 'fixed',
+          bottom: 0,
+          right: {
+            xs: '14px',
+            sm: '10vw',
+            md: '16vw',
+            lg: '25vw',
+          },
+          left: {
+            xs: '14px',
+            sm: '10vw',
+            md: '16vw',
+            lg: '25vw',
+          },
+        }}
+        onSubmit={sendConversationRequest}
+        disabledSubmit={send}
+      />
     </>
   );
 }
