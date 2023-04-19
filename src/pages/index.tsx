@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import type { ChatCompletionRequestMessage } from 'openai';
 import { Configuration, OpenAIApi } from 'openai';
 import { Button, TextField } from '@mui/material';
@@ -13,6 +13,20 @@ export default function Home() {
   const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
   const [send, setSend] = useState<boolean>(false);
   const [textValue, setTextValue] = useState<string>('');
+  const [loadingText, setLoadingText] = useState('Loading');
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setLoadingText((prevText) => {
+        if (prevText === 'Loading...') {
+          return 'Loading';
+        }
+        return `${prevText}.`;
+      });
+    }, 500);
+
+    return () => clearInterval(intervalId);
+  }, []);
 
   const sendConversationRequest = async () => {
     const newMessages: ChatCompletionRequestMessage[] = [
@@ -76,6 +90,19 @@ export default function Home() {
             </div>
           ))
         }
+        {
+          send
+            ? (
+              <div>
+                <div style={{
+                  float: 'left', padding: 12, background: '#f5f5f5', borderRadius: 6, marginBottom: 16,
+                }}
+                >
+                  {loadingText}
+                </div>
+              </div>
+            ) : null
+        }
       </div>
       <div style={{
         position: 'fixed', bottom: 0, right: 480, left: 480, background: '#ffffff', padding: '16px 0',
@@ -94,12 +121,12 @@ export default function Home() {
 
           <Button
             variant="contained"
-            endIcon={send ? null : <SendIcon />}
+            endIcon={<SendIcon />}
             onClick={sendConversationRequest}
-            style={{ marginLeft: 8, width: 100 }}
+            style={{ marginLeft: 8 }}
             disabled={send}
           >
-            {send ? 'Loading...' : 'Send' }
+            Send
           </Button>
         </div>
       </div>
