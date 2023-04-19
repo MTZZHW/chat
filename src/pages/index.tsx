@@ -3,7 +3,6 @@ import type { ChatCompletionRequestMessage } from 'openai';
 import { Configuration, OpenAIApi } from 'openai';
 import { Button, TextField } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
-import LoadingButton from '@mui/lab/LoadingButton';
 
 const configuration = new Configuration({
   apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
