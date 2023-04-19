@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import type { ChatCompletionRequestMessage } from 'openai';
 import { Configuration, OpenAIApi } from 'openai';
-import { Button, TextField } from '@mui/material';
+import { Box, Button, TextField } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
+import Message from '@/components/Message';
+import LoadingMessage from '@/components/LoadingMessage';
 
 const configuration = new Configuration({
   apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
@@ -13,20 +15,6 @@ export default function Home() {
   const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
   const [send, setSend] = useState<boolean>(false);
   const [textValue, setTextValue] = useState<string>('');
-  const [loadingText, setLoadingText] = useState('Loading');
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setLoadingText((prevText) => {
-        if (prevText === 'Loading...') {
-          return 'Loading';
-        }
-        return `${prevText}.`;
-      });
-    }, 500);
-
-    return () => clearInterval(intervalId);
-  }, []);
 
   const sendConversationRequest = async () => {
     const newMessages: ChatCompletionRequestMessage[] = [
@@ -57,79 +45,68 @@ export default function Home() {
   };
 
   return (
-    <div style={{
-      display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '24px 480px 12px 480px',
-    }}
-    >
-      <div style={{
-        display: 'flex', flexDirection: 'column', width: '100%', marginBottom: 88,
-      }}
-      >
-        {
-          messages.map((message) => (
-            <div>
-              {
-                message.role === 'user'
-                  ? (
-                    <div style={{
-                      float: 'right', padding: 12, background: '#89d961', borderRadius: 6, marginBottom: 16,
-                    }}
-                    >
-                      {message.content}
-                    </div>
-                  )
-                  : (
-                    <div style={{
-                      float: 'left', padding: 12, background: '#f5f5f5', borderRadius: 6, marginBottom: 16,
-                    }}
-                    >
-                      {message.content}
-                    </div>
-                  )
-              }
-            </div>
-          ))
-        }
-        {
-          send
-            ? (
-              <div>
-                <div style={{
-                  float: 'left', padding: 12, background: '#f5f5f5', borderRadius: 6, marginBottom: 16,
-                }}
-                >
-                  {loadingText}
-                </div>
-              </div>
-            ) : null
-        }
-      </div>
-      <div style={{
-        position: 'fixed', bottom: 0, right: 480, left: 480, background: '#ffffff', padding: '16px 0', height: 56,
+    <>
+      <Box sx={{
+        margin: {
+          xs: '24px 14px 12px',
+          sm: '24px 10vw 12px',
+          md: '24px 16vw 12px',
+          lg: '24px 25vw 12px',
+        },
       }}
       >
         <div style={{
-          display: 'flex', alignItems: 'flex-end',
+          display: 'flex', flexDirection: 'column', width: '100%', marginBottom: 88,
         }}
         >
-          <TextField
-            multiline
-            value={textValue}
-            onChange={(event) => setTextValue(event.target.value)}
-            style={{ width: '100%' }}
-          />
-
-          <Button
-            variant="contained"
-            endIcon={<SendIcon />}
-            onClick={sendConversationRequest}
-            style={{ marginLeft: 8 }}
-            disabled={send}
-          >
-            Send
-          </Button>
+          {
+          messages.map((message) => (
+            <Message role={message.role} content={message.content} />
+          ))
+        }
+          {
+          send ? <LoadingMessage /> : null
+        }
         </div>
-      </div>
-    </div>
+      </Box>
+      <Box sx={{
+        position: 'fixed',
+        bottom: 0,
+        background: '#ffffff',
+        padding: '16px 0',
+        height: 56,
+        right: {
+          xs: '14px',
+          sm: '10vw',
+          md: '16vw',
+          lg: '25vw',
+        },
+        left: {
+          xs: '14px',
+          sm: '10vw',
+          md: '16vw',
+          lg: '25vw',
+        },
+        display: 'flex',
+        alignItems: 'flex-end',
+      }}
+      >
+        <TextField
+          multiline
+          value={textValue}
+          onChange={(event) => setTextValue(event.target.value)}
+          style={{ width: '100%' }}
+        />
+        <Button
+          variant="contained"
+          endIcon={<SendIcon />}
+          onClick={sendConversationRequest}
+          style={{ marginLeft: 8 }}
+          disabled={send}
+        >
+          Send
+        </Button>
+      </Box>
+    </>
   );
 }
