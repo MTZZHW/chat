@@ -13,7 +13,7 @@ function Message({ role, content }: MessageProps) {
       <div style={{
         float: role === 'user' ? 'right' : 'left',
         background: role === 'user' ? '#89d961' : '#f5f5f5',
-        padding: 12,
+        padding: '0 12px',
         borderRadius: 6,
         marginBottom: 16,
       }}

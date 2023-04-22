@@ -1,37 +1,34 @@
 import React, { useState, useEffect } from 'react';
+import type { GetServerSideProps, InferGetServerSidePropsType, NextPage } from 'next';
 import type { ChatCompletionRequestMessage } from 'openai';
 import { Configuration, OpenAIApi } from 'openai';
-import { v4 as uuid } from 'uuid';
 import localForage from 'localforage';
-import ChatInputArea from '@/components/ChatInputArea';
-import ChatDisplayArea from '@/components/ChatDisplayArea';
 import type { ChatLabelType } from '@/components/ChatListArea';
 import ChatListArea from '@/components/ChatListArea';
+import ChatDisplayArea from '@/components/ChatDisplayArea';
+import ChatInputArea from '@/components/ChatInputArea';
 
 const configuration = new Configuration({
   apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
 
-export default function Home() {
+// eslint-disable-next-line react/function-component-definition, react/prop-types
+const Chat: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ chatId }) => {
   const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
   const [send, setSend] = useState<boolean>(false);
 
-  const [chatId, setChatId] = useState<string>('');
   const [chatLabels, setChatLabels] = useState<ChatLabelType[]>([]);
 
   useEffect(() => {
     (async () => {
-      let chatLabelStorage: ChatLabelType[] | null;
-      try {
-        chatLabelStorage = await localForage.getItem('chatLabels');
-      } catch {
-        chatLabelStorage = [];
-      }
+      const chatLabelStorage: ChatLabelType[] = await localForage.getItem('chatLabels') as ChatLabelType[];
+      setChatLabels(chatLabelStorage);
 
-      setChatLabels([...chatLabelStorage!]);
+      const chatStorage: ChatCompletionRequestMessage[] = await localForage.getItem(chatId) as ChatCompletionRequestMessage[];
+      setMessages(chatStorage);
     })();
-  }, []);
+  }, [chatId]);
 
   const sendConversationRequest = async (chatContent: string) => {
     const newMessages: ChatCompletionRequestMessage[] = [
@@ -56,25 +53,7 @@ export default function Home() {
         completion.data.choices[0].message,
       ];
 
-      if (chatId) {
-        localForage.setItem(chatId, updatedMessages);
-      } else {
-        const newUuid = uuid();
-        localForage.setItem(newUuid, updatedMessages);
-        setChatId(newUuid);
-
-        const newChatLabel: ChatLabelType = {
-          uid: newUuid,
-          label: newUuid,
-        };
-        if (chatLabels) {
-          localForage.setItem('chatLabels', [...chatLabels, newChatLabel]);
-          setChatLabels([...chatLabels, newChatLabel]);
-        } else {
-          localForage.setItem('chatLabels', [newChatLabel]);
-          setChatLabels([newChatLabel]);
-        }
-      }
+      localForage.setItem(chatId, updatedMessages);
 
       setMessages(updatedMessages);
     }
@@ -130,4 +109,10 @@ export default function Home() {
       </div>
     </div>
   );
-}
+};
+
+export const getServerSideProps: GetServerSideProps<{ chatId: string }, { chatId: string }> = async ({ params }) => ({
+  props: { chatId: params!.chatId },
+});
+
+export default Chat;

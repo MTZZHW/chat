@@ -5,13 +5,13 @@ import {
 } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 
-type ChatInputBoxProps = {
+type ChatInputAreaProps = {
   sx: SxProps<Theme>
   onSubmit: (value: string) => void
   disabledSubmit: boolean
 };
 
-function ChatInputBox({ sx, onSubmit, disabledSubmit }: ChatInputBoxProps) {
+function ChatInputArea({ sx, onSubmit, disabledSubmit }: ChatInputAreaProps) {
   const [chatContent, setChatContent] = useState<string>('');
 
   return (
@@ -31,7 +31,6 @@ function ChatInputBox({ sx, onSubmit, disabledSubmit }: ChatInputBoxProps) {
         maxRows={10}
         value={chatContent}
         onChange={(event) => {
-          console.log('event.target.value', event.target.value);
           setChatContent(event.target.value);
         }}
       />
@@ -44,4 +43,4 @@ function ChatInputBox({ sx, onSubmit, disabledSubmit }: ChatInputBoxProps) {
   );
 }
 
-export default ChatInputBox;
+export default ChatInputArea;
