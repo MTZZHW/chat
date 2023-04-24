@@ -7,7 +7,7 @@ import SendIcon from '@mui/icons-material/Send';
 
 type ChatInputAreaProps = {
   sx: SxProps<Theme>
-  onSubmit: (value: string) => void
+  onSubmit: (chatContent: string) => void
   disabledSubmit: boolean
 };
 

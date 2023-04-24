@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
+import type { SxProps, Theme } from '@mui/material/styles';
 import { styled, ThemeProvider, createTheme } from '@mui/material/styles';
 import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
@@ -27,12 +28,13 @@ export type ChatLabelType = {
 };
 
 type ChatListAreaProps = {
+  sx: SxProps<Theme>;
   chatLabels: ChatLabelType[];
 };
 
-function ChatListArea({ chatLabels }: ChatListAreaProps) {
+function ChatListArea({ sx, chatLabels }: ChatListAreaProps) {
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={sx}>
       <ThemeProvider
         theme={createTheme({
           components: {
@@ -49,7 +51,7 @@ function ChatListArea({ chatLabels }: ChatListAreaProps) {
           },
         })}
       >
-        <Paper elevation={0} sx={{ width: '260px', borderRadius: 0 }}>
+        <Paper elevation={0} sx={{ width: '100%', borderRadius: 0 }}>
           <FireNav component="nav" disablePadding>
             <ListItemButton component="a" href="/">
               <ListItemText
