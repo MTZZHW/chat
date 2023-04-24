@@ -11,14 +11,14 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-function Chat({ chatId }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+function Chat({ chatId }: InferGetServerSidePropsType<typeof getServerSideProps>): JSX.Element {
   const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
   const [isSendingMessage, setIsSendingMessage] = useState<boolean>(false);
 
   const [chatLabels, setChatLabels] = useState<ChatLabelType[]>([]);
 
   useEffect(() => {
-    (async () => {
+    (async (): Promise<void> => {
       const chatLabelStorage: ChatLabelType[] = (await localForage.getItem('chatLabels')) as ChatLabelType[];
       setChatLabels(chatLabelStorage);
 
@@ -27,7 +27,7 @@ function Chat({ chatId }: InferGetServerSidePropsType<typeof getServerSideProps>
     })();
   }, [chatId]);
 
-  const sendConversationRequest = async (chatContent: string) => {
+  const sendConversationRequest = async (chatContent: string): Promise<void> => {
     const newMessages: ChatCompletionRequestMessage[] = [
       ...messages,
       {

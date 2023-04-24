@@ -11,7 +11,7 @@ type ChatDisplayAreaProps = {
   loading: boolean;
 };
 
-function ChatDisplayArea({ sx, messages, loading }: ChatDisplayAreaProps) {
+function ChatDisplayArea({ sx, messages, loading }: ChatDisplayAreaProps): JSX.Element {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -21,7 +21,6 @@ function ChatDisplayArea({ sx, messages, loading }: ChatDisplayAreaProps) {
   return (
     <Box sx={sx}>
       {messages.map((message, index) => (
-        // eslint-disable-next-line react/no-array-index-key
         <Message key={index} role={message.role} content={message.content} />
       ))}
       {loading ? <LoadingMessage /> : null}

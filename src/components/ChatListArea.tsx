@@ -32,7 +32,7 @@ type ChatListAreaProps = {
   chatLabels: ChatLabelType[];
 };
 
-function ChatListArea({ sx, chatLabels }: ChatListAreaProps) {
+function ChatListArea({ sx, chatLabels }: ChatListAreaProps): JSX.Element {
   return (
     <Box sx={sx}>
       <ThemeProvider

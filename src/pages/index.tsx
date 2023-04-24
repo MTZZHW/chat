@@ -11,7 +11,7 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-function Home() {
+function Home(): JSX.Element {
   const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
   const [isSendingMessage, setIsSendingMessage] = useState<boolean>(false);
 
@@ -19,7 +19,7 @@ function Home() {
   const [chatLabels, setChatLabels] = useState<ChatLabelType[]>([]);
 
   useEffect(() => {
-    (async () => {
+    (async (): Promise<void> => {
       let chatLabelStorage: ChatLabelType[] | null;
       try {
         chatLabelStorage = await localForage.getItem('chatLabels');
@@ -31,7 +31,7 @@ function Home() {
     })();
   }, []);
 
-  const sendConversationRequest = async (chatContent: string) => {
+  const sendConversationRequest = async (chatContent: string): Promise<void> => {
     const newMessages: ChatCompletionRequestMessage[] = [
       ...messages,
       {

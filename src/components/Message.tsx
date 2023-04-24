@@ -7,7 +7,7 @@ type MessageProps = {
   content: string;
 };
 
-function Message({ role, content }: MessageProps) {
+function Message({ role, content }: MessageProps): JSX.Element {
   return (
     <div>
       <div

@@ -9,14 +9,14 @@ type ChatInputAreaProps = {
   disabledSubmit: boolean;
 };
 
-function ChatInputArea({ sx, onSubmit, disabledSubmit }: ChatInputAreaProps) {
+function ChatInputArea({ sx, onSubmit, disabledSubmit }: ChatInputAreaProps): JSX.Element {
   const [chatContent, setChatContent] = useState<string>('');
 
   return (
     <Paper
       component="form"
       elevation={3}
-      onSubmit={(event) => {
+      onSubmit={(event): void => {
         event.preventDefault();
         onSubmit(chatContent);
         setChatContent('');
@@ -28,7 +28,7 @@ function ChatInputArea({ sx, onSubmit, disabledSubmit }: ChatInputAreaProps) {
         multiline
         maxRows={10}
         value={chatContent}
-        onChange={(event) => {
+        onChange={(event): void => {
           setChatContent(event.target.value);
         }}
       />

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-function Message() {
+function Message(): JSX.Element {
   const [loadingText, setLoadingText] = useState('Loading');
 
   useEffect(() => {
