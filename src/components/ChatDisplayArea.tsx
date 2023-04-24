@@ -6,9 +6,9 @@ import Message from './Message';
 import LoadingMessage from './LoadingMessage';
 
 type ChatDisplayAreaProps = {
-  sx: SxProps<Theme>
-  messages: ChatCompletionRequestMessage[],
-  loading: boolean,
+  sx: SxProps<Theme>;
+  messages: ChatCompletionRequestMessage[];
+  loading: boolean;
 };
 
 function ChatDisplayArea({ sx, messages, loading }: ChatDisplayAreaProps) {
@@ -20,15 +20,11 @@ function ChatDisplayArea({ sx, messages, loading }: ChatDisplayAreaProps) {
 
   return (
     <Box sx={sx}>
-      {
-        messages.map((message, index) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <Message key={index} role={message.role} content={message.content} />
-        ))
-      }
-      {
-        loading ? <LoadingMessage /> : null
-      }
+      {messages.map((message, index) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <Message key={index} role={message.role} content={message.content} />
+      ))}
+      {loading ? <LoadingMessage /> : null}
       <div ref={ref} />
     </Box>
   );

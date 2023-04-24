@@ -11,7 +11,7 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-export default function Home() {
+function Home() {
   const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
   const [isSendingMessage, setIsSendingMessage] = useState<boolean>(false);
 
@@ -49,10 +49,7 @@ export default function Home() {
     });
 
     if (completion.data.choices[0].message) {
-      const updatedMessages: ChatCompletionRequestMessage[] = [
-        ...newMessages,
-        completion.data.choices[0].message,
-      ];
+      const updatedMessages: ChatCompletionRequestMessage[] = [...newMessages, completion.data.choices[0].message];
 
       if (chatId) {
         localForage.setItem(chatId, updatedMessages);
@@ -80,12 +77,7 @@ export default function Home() {
     setIsSendingMessage(false);
   };
 
-  return (
-    <ChatLayout
-      chatLabels={chatLabels}
-      sendingMessage={isSendingMessage}
-      messages={messages}
-      sendConversationRequest={sendConversationRequest}
-    />
-  );
+  return <ChatLayout chatLabels={chatLabels} sendingMessage={isSendingMessage} messages={messages} sendConversationRequest={sendConversationRequest} />;
 }
+
+export default Home;

@@ -18,13 +18,14 @@ function Message() {
 
   return (
     <div>
-      <div style={{
-        float: 'left',
-        background: '#f5f5f5',
-        padding: '0 12px',
-        borderRadius: 6,
-        marginBottom: 16,
-      }}
+      <div
+        style={{
+          float: 'left',
+          background: '#f5f5f5',
+          padding: '0 12px',
+          borderRadius: 6,
+          marginBottom: 16,
+        }}
       >
         <p>{loadingText}</p>
       </div>

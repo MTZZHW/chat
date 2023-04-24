@@ -10,19 +10,22 @@ type MessageProps = {
 function Message({ role, content }: MessageProps) {
   return (
     <div>
-      <div style={{
-        float: role === 'user' ? 'right' : 'left',
-        background: role === 'user' ? '#89d961' : '#f5f5f5',
-        padding: '0 12px',
-        borderRadius: 6,
-        marginBottom: 16,
-      }}
+      <div
+        style={{
+          float: role === 'user' ? 'right' : 'left',
+          background: role === 'user' ? '#89d961' : '#f5f5f5',
+          padding: '0 12px',
+          borderRadius: 6,
+          marginBottom: 16,
+        }}
       >
-        {
-          role === 'user'
-            ? <div style={{ whiteSpace: 'pre-wrap' }}><p>{content}</p></div>
-            : <ReactMarkdown>{content}</ReactMarkdown>
-        }
+        {role === 'user' ? (
+          <div style={{ whiteSpace: 'pre-wrap' }}>
+            <p>{content}</p>
+          </div>
+        ) : (
+          <ReactMarkdown>{content}</ReactMarkdown>
+        )}
       </div>
     </div>
   );

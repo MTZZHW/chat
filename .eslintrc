@@ -1,0 +1,14 @@
+{
+  "extends": [
+    "airbnb", 
+    "airbnb-typescript",
+    "plugin:prettier/recommended"
+  ],
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "rules": {
+    "@typescript-eslint/consistent-type-imports": "warn",
+    "import/extensions": ["error", "never", { "css": "always" }]
+  }
+}

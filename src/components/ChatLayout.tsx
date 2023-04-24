@@ -12,9 +12,7 @@ type ChatLayoutProps = {
   sendConversationRequest: (chatContent: string) => void;
 };
 
-function ChatLayout({
-  chatLabels, sendingMessage: sending, messages, sendConversationRequest,
-}: ChatLayoutProps) {
+function ChatLayout({ chatLabels, sendingMessage: sending, messages, sendConversationRequest }: ChatLayoutProps) {
   return (
     <div style={{ display: 'flex', height: '100vh', width: '100vw' }}>
       <ChatListArea sx={{ display: 'flex', width: '260px' }} chatLabels={chatLabels} />

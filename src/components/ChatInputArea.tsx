@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import type { SxProps, Theme } from '@mui/material';
-import {
-  Box, IconButton, InputBase, Paper,
-} from '@mui/material';
+import { Box, IconButton, InputBase, Paper } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 
 type ChatInputAreaProps = {
-  sx: SxProps<Theme>
-  onSubmit: (chatContent: string) => void
-  disabledSubmit: boolean
+  sx: SxProps<Theme>;
+  onSubmit: (chatContent: string) => void;
+  disabledSubmit: boolean;
 };
 
 function ChatInputArea({ sx, onSubmit, disabledSubmit }: ChatInputAreaProps) {

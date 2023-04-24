@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 import type { SxProps, Theme } from '@mui/material/styles';
 import { styled, ThemeProvider, createTheme } from '@mui/material/styles';
@@ -73,16 +73,8 @@ function ChatListArea({ sx, chatLabels }: ChatListAreaProps) {
               }}
             >
               {chatLabels.map((chatLabel) => (
-                <ListItemButton
-                  key={chatLabel.uid}
-                  sx={{ py: '8px', minHeight: 32, color: 'rgba(255,255,255,.8)' }}
-                  component="a"
-                  href={`/${chatLabel.uid}`}
-                >
-                  <ListItemText
-                    primary={chatLabel.label}
-                    primaryTypographyProps={{ fontSize: 14, fontWeight: 'medium' }}
-                  />
+                <ListItemButton key={chatLabel.uid} sx={{ py: '8px', minHeight: 32, color: 'rgba(255,255,255,.8)' }} component="a" href={`/${chatLabel.uid}`}>
+                  <ListItemText primary={chatLabel.label} primaryTypographyProps={{ fontSize: 14, fontWeight: 'medium' }} />
                 </ListItemButton>
               ))}
             </Box>

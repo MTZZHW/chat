@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import type { GetServerSideProps, InferGetServerSidePropsType, NextPage } from 'next';
+import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import type { ChatCompletionRequestMessage } from 'openai';
 import { Configuration, OpenAIApi } from 'openai';
 import localForage from 'localforage';
@@ -11,8 +11,7 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-// eslint-disable-next-line react/function-component-definition, react/prop-types
-const Chat: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ chatId }) => {
+function Chat({ chatId }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
   const [isSendingMessage, setIsSendingMessage] = useState<boolean>(false);
 
@@ -20,10 +19,10 @@ const Chat: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
 
   useEffect(() => {
     (async () => {
-      const chatLabelStorage: ChatLabelType[] = await localForage.getItem('chatLabels') as ChatLabelType[];
+      const chatLabelStorage: ChatLabelType[] = (await localForage.getItem('chatLabels')) as ChatLabelType[];
       setChatLabels(chatLabelStorage);
 
-      const chatStorage: ChatCompletionRequestMessage[] = await localForage.getItem(chatId) as ChatCompletionRequestMessage[];
+      const chatStorage: ChatCompletionRequestMessage[] = (await localForage.getItem(chatId)) as ChatCompletionRequestMessage[];
       setMessages(chatStorage);
     })();
   }, [chatId]);
@@ -46,10 +45,7 @@ const Chat: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
     });
 
     if (completion.data.choices[0].message) {
-      const updatedMessages: ChatCompletionRequestMessage[] = [
-        ...newMessages,
-        completion.data.choices[0].message,
-      ];
+      const updatedMessages: ChatCompletionRequestMessage[] = [...newMessages, completion.data.choices[0].message];
 
       localForage.setItem(chatId, updatedMessages);
 
@@ -59,15 +55,8 @@ const Chat: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
     setIsSendingMessage(false);
   };
 
-  return (
-    <ChatLayout
-      chatLabels={chatLabels}
-      sendingMessage={isSendingMessage}
-      messages={messages}
-      sendConversationRequest={sendConversationRequest}
-    />
-  );
-};
+  return <ChatLayout chatLabels={chatLabels} sendingMessage={isSendingMessage} messages={messages} sendConversationRequest={sendConversationRequest} />;
+}
 
 export const getServerSideProps: GetServerSideProps<{ chatId: string }, { chatId: string }> = async ({ params }) => ({
   props: { chatId: params!.chatId },
