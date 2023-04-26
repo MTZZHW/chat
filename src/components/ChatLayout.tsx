@@ -1,18 +1,79 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import type { ChatCompletionRequestMessage } from 'openai';
+import { Configuration, OpenAIApi } from 'openai';
+import services from '../../services';
 import ChatInputArea from '@/components/ChatInputArea';
 import ChatDisplayArea from '@/components/ChatDisplayArea';
-import type { ChatLabelType } from '@/components/ChatListArea';
 import ChatListArea from '@/components/ChatListArea';
+import type { ChatLabelType } from '@/hooks/useChatLabels';
+import useChatLabels from '@/hooks/useChatLabels';
+import useUser from '@/hooks/useUser';
+import useRouterQuery from '@/hooks/useRouterQuery';
 
-type ChatLayoutProps = {
-  chatLabels: ChatLabelType[];
-  sendingMessage: boolean;
-  messages: ChatCompletionRequestMessage[];
-  sendConversationRequest: (chatContent: string) => void;
-};
+const configuration = new Configuration({
+  apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+});
+const openai = new OpenAIApi(configuration);
 
-function ChatLayout({ chatLabels, sendingMessage: sending, messages, sendConversationRequest }: ChatLayoutProps): JSX.Element {
+function ChatLayout(): JSX.Element {
+  const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
+  const [isSendingMessage, setIsSendingMessage] = useState<boolean>(false);
+
+  const { user } = useUser();
+  const { chatLabels, addChatLabel } = useChatLabels();
+
+  const [chatId, setChatId] = useRouterQuery();
+
+  useEffect(() => {
+    (async (): Promise<void> => {
+      if (chatId) {
+        const { success, data } = await services.fetchChatDetail({ id: chatId });
+        if (success && data) {
+          setMessages(data.messages);
+        }
+      }
+    })();
+  }, [chatId]);
+
+  const sendConversationRequest = async (chatContent: string): Promise<void> => {
+    const newMessages: ChatCompletionRequestMessage[] = [
+      ...messages,
+      {
+        role: 'user',
+        content: chatContent,
+      },
+    ];
+
+    setMessages(newMessages);
+    setIsSendingMessage(true);
+
+    const completion = await openai.createChatCompletion({
+      model: 'gpt-3.5-turbo',
+      messages: newMessages,
+    });
+
+    if (completion.data.choices[0].message) {
+      const updatedMessages: ChatCompletionRequestMessage[] = [...newMessages, completion.data.choices[0].message];
+
+      if (!chatId) {
+        console.log(chatId);
+        const { success, data } = await services.createChat({ userId: user.id, messages: updatedMessages });
+
+        if (success && data) {
+          const newChatLabel: ChatLabelType = { id: data.id, label: data.id };
+          addChatLabel(newChatLabel);
+          setChatId(data.id);
+        }
+      } else {
+        await services.updateChat({ id: chatId, messages: updatedMessages });
+      }
+
+      setMessages(updatedMessages);
+    }
+
+    setIsSendingMessage(false);
+  };
+
   return (
     <div style={{ display: 'flex', height: '100vh', width: '100vw' }}>
       <ChatListArea sx={{ display: 'flex', width: '260px' }} chatLabels={chatLabels} />
@@ -32,7 +93,7 @@ function ChatLayout({ chatLabels, sendingMessage: sending, messages, sendConvers
             },
             overflowY: 'auto',
           }}
-          loading={sending}
+          loading={isSendingMessage}
           messages={messages}
         />
         <ChatInputArea
@@ -56,7 +117,7 @@ function ChatLayout({ chatLabels, sendingMessage: sending, messages, sendConvers
             },
           }}
           onSubmit={sendConversationRequest}
-          disabledSubmit={sending}
+          disabledSubmit={isSendingMessage}
         />
       </div>
     </div>

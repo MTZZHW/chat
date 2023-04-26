@@ -7,6 +7,7 @@ import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Paper from '@mui/material/Paper';
+import type { ChatLabelType } from '@/hooks/useChatLabels';
 
 const FireNav = styled(List)<{ component?: React.ElementType }>({
   '& .MuiListItemButton-root': {
@@ -21,11 +22,6 @@ const FireNav = styled(List)<{ component?: React.ElementType }>({
     fontSize: 20,
   },
 });
-
-export type ChatLabelType = {
-  uid: string;
-  label: string;
-};
 
 type ChatListAreaProps = {
   sx: SxProps<Theme>;
@@ -73,7 +69,12 @@ function ChatListArea({ sx, chatLabels }: ChatListAreaProps): JSX.Element {
               }}
             >
               {chatLabels.map((chatLabel) => (
-                <ListItemButton key={chatLabel.uid} sx={{ py: '8px', minHeight: 32, color: 'rgba(255,255,255,.8)' }} component="a" href={`/${chatLabel.uid}`}>
+                <ListItemButton
+                  key={chatLabel.id}
+                  sx={{ py: '8px', minHeight: 32, color: 'rgba(255,255,255,.8)' }}
+                  component="a"
+                  href={`/chat/${chatLabel.id}`}
+                >
                   <ListItemText primary={chatLabel.label} primaryTypographyProps={{ fontSize: 14, fontWeight: 'medium' }} />
                 </ListItemButton>
               ))}
