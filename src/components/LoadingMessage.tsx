@@ -1,3 +1,4 @@
+import { grey } from '@mui/material/colors';
 import React, { useEffect, useState } from 'react';
 
 function Message(): JSX.Element {
@@ -21,7 +22,7 @@ function Message(): JSX.Element {
       <div
         style={{
           float: 'left',
-          background: '#f5f5f5',
+          background: grey[100],
           padding: '0 12px',
           borderRadius: 6,
           marginBottom: 16,
