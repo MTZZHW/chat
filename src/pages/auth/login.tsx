@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
 import { useRouter } from 'next/router';
+import Layout from '@/components/Layout';
 
 function Login(): JSX.Element {
   const [username, setUsername] = useState<string>('');
@@ -23,26 +24,28 @@ function Login(): JSX.Element {
   };
 
   return (
-    <Dialog open={true}>
-      <DialogTitle>Login</DialogTitle>
-      <DialogContent>
-        <TextField
-          id="username"
-          label="Username"
-          type="text"
-          autoFocus
-          margin="dense"
-          fullWidth
-          variant="standard"
-          onChange={(event): void => {
-            setUsername(event.target.value);
-          }}
-        />
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleSubmit}>Ok</Button>
-      </DialogActions>
-    </Dialog>
+    <Layout title="Login | Chat">
+      <Dialog open={true}>
+        <DialogTitle>Login</DialogTitle>
+        <DialogContent>
+          <TextField
+            id="username"
+            label="Username"
+            type="text"
+            autoFocus
+            margin="dense"
+            fullWidth
+            variant="standard"
+            onChange={(event): void => {
+              setUsername(event.target.value);
+            }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleSubmit}>Ok</Button>
+        </DialogActions>
+      </Dialog>
+    </Layout>
   );
 }
 

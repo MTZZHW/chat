@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import type { ChatCompletionRequestMessage } from 'openai';
 import { Configuration, OpenAIApi } from 'openai';
 import services from '../../services';
+import Layout from './Layout';
 import ChatInputArea from '@/components/ChatInputArea';
 import ChatDisplayArea from '@/components/ChatDisplayArea';
 import ChatListArea from '@/components/ChatListArea';
@@ -75,13 +76,15 @@ function ChatLayout(): JSX.Element {
   };
 
   return (
-    <div style={{ display: 'flex', height: '100vh', width: '100vw' }}>
-      <ChatListArea chatLabels={chatLabels} />
-      <div style={{ height: '100%', width: 'calc(100vw - 260px)', display: 'flex', flexDirection: 'column' }}>
-        <ChatDisplayArea loading={isSendingMessage} messages={messages} />
-        <ChatInputArea onSubmit={sendConversationRequest} disabledSubmit={isSendingMessage} />
+    <Layout title={`${chatId ? chatId + ' | ' : 'New Chat | '}Chat`}>
+      <div style={{ display: 'flex', height: '100vh', width: '100vw' }}>
+        <ChatListArea chatLabels={chatLabels} />
+        <div style={{ height: '100%', width: 'calc(100vw - 260px)', display: 'flex', flexDirection: 'column' }}>
+          <ChatDisplayArea loading={isSendingMessage} messages={messages} />
+          <ChatInputArea onSubmit={sendConversationRequest} disabledSubmit={isSendingMessage} />
+        </div>
       </div>
-    </div>
+    </Layout>
   );
 }
 
