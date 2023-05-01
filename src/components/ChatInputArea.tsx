@@ -18,18 +18,25 @@ type ChatInputAreaProps = {
 function ChatInputArea({ sx, onSubmit, disabledSubmit }: ChatInputAreaProps): JSX.Element {
   const [chatContent, setChatContent] = useState<string>('');
 
+  const handleSubmit = (event: FormEvent<HTMLFormElement> | KeyboardEvent<HTMLDivElement>): void => {
+    event.preventDefault();
+    onSubmit(chatContent);
+    setChatContent('');
+  };
+
+  const handleTextFieldKeyDown = (event: KeyboardEvent<HTMLDivElement>): void => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      handleSubmit(event);
+    }
+  };
+
+  const handleTextFieldChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
+    setChatContent(event.target.value);
+  };
+
   return (
     <Box p="16px 16px" sx={{ boxShadow: 2, ...sx }}>
-      <Box
-        component="form"
-        onSubmit={(event): void => {
-          event.preventDefault();
-          onSubmit(chatContent);
-          setChatContent('');
-        }}
-        display="flex"
-        alignItems="end"
-      >
+      <Box component="form" onSubmit={handleSubmit} display="flex" alignItems="end">
         <TextField
           fullWidth
           variant="outlined"
@@ -37,9 +44,8 @@ function ChatInputArea({ sx, onSubmit, disabledSubmit }: ChatInputAreaProps): JS
           multiline
           maxRows={10}
           value={chatContent}
-          onChange={(event): void => {
-            setChatContent(event.target.value);
-          }}
+          onChange={handleTextFieldChange}
+          onKeyDown={handleTextFieldKeyDown}
           size="small"
         />
         <Button type="submit" sx={{ ml: '8px' }} variant="contained" disabled={disabledSubmit} size="medium">
