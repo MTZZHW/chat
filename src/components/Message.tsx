@@ -1,6 +1,6 @@
 import React from 'react';
 import type { ChatCompletionRequestMessageRoleEnum } from 'openai';
-import ReactMarkdown from 'react-markdown';
+import MarkdownRenderer from './MarkdownRenderer';
 
 type MessageProps = {
   role: ChatCompletionRequestMessageRoleEnum;
@@ -24,7 +24,7 @@ function Message({ role, content }: MessageProps): JSX.Element {
             <p>{content}</p>
           </div>
         ) : (
-          <ReactMarkdown>{content}</ReactMarkdown>
+          <MarkdownRenderer>{content}</MarkdownRenderer>
         )}
       </div>
     </div>
