@@ -77,7 +77,7 @@ function ChatLayout(): JSX.Element {
   return (
     <div style={{ display: 'flex', height: '100vh', width: '100vw' }}>
       <ChatListArea sx={{ display: 'flex', width: '260px' }} chatLabels={chatLabels} />
-      <div style={{ height: '100%', width: 'calc(100vw - 260px)', position: 'relative' }}>
+      <div style={{ height: '100%', width: 'calc(100vw - 260px)', display: 'flex', flexDirection: 'column' }}>
         <ChatDisplayArea
           sx={{
             display: 'flex',
@@ -96,29 +96,7 @@ function ChatLayout(): JSX.Element {
           loading={isSendingMessage}
           messages={messages}
         />
-        <ChatInputArea
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            position: 'absolute',
-            p: '12px 4px',
-            bottom: '12px',
-            left: {
-              xs: '14px',
-              sm: '14px',
-              md: '11vw',
-              lg: '22vw',
-            },
-            right: {
-              xs: '14px',
-              sm: '14px',
-              md: '11vw',
-              lg: '22vw',
-            },
-          }}
-          onSubmit={sendConversationRequest}
-          disabledSubmit={isSendingMessage}
-        />
+        <ChatInputArea onSubmit={sendConversationRequest} disabledSubmit={isSendingMessage} />
       </div>
     </div>
   );
