@@ -79,7 +79,7 @@ function ChatLayout(): JSX.Element {
     <Layout title={`${chatId ? chatId + ' | ' : 'New Chat | '}Chat`}>
       <div style={{ display: 'flex', height: '100vh', width: '100vw' }}>
         <ChatListArea chatLabels={chatLabels} />
-        <div style={{ height: '100%', width: 'calc(100vw - 260px)', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ height: '100%', width: 'calc(100vw - 256px)', display: 'flex', flexDirection: 'column' }}>
           <ChatDisplayArea loading={isSendingMessage} messages={messages} />
           <ChatInputArea onSubmit={sendConversationRequest} disabledSubmit={isSendingMessage} />
         </div>

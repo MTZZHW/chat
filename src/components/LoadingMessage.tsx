@@ -23,8 +23,8 @@ function Message(): JSX.Element {
         style={{
           float: 'left',
           background: grey[100],
-          padding: '0 12px',
-          borderRadius: 6,
+          padding: '0 16px',
+          borderRadius: '0.3rem',
           marginBottom: 16,
         }}
       >

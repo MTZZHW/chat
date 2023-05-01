@@ -13,7 +13,7 @@ type ChatListAreaProps = {
 function ChatListArea({ sx, chatLabels }: ChatListAreaProps): JSX.Element {
   return (
     <Box display="flex" sx={sx}>
-      <List component="nav" disablePadding sx={{ width: '260px' }}>
+      <List component="nav" disablePadding sx={{ width: '256px' }}>
         <ListItem>
           <Link href="/" passHref legacyBehavior>
             <ListItemButton component="a" sx={{ border: '1px dashed grey' }}>
@@ -27,7 +27,7 @@ function ChatListArea({ sx, chatLabels }: ChatListAreaProps): JSX.Element {
           {chatLabels.map((chatLabel) => (
             <ListItem key={chatLabel.id}>
               <Link href={`/chat/${chatLabel.id}`} passHref legacyBehavior>
-                <ListItemButton component="a" sx={{ border: '1px solid grey', width: '227px' }}>
+                <ListItemButton component="a" sx={{ border: '1px solid grey', width: '223px' }}>
                   <ListItemText primaryTypographyProps={{ fontSize: 14, fontWeight: 'bold', noWrap: true }}>{chatLabel.label}</ListItemText>
                 </ListItemButton>
               </Link>

@@ -32,20 +32,14 @@ function CodeBlock({ inline, className, children, ...props }: CodeBlockProps): J
         color="white"
         display="flex"
         justifyContent="space-between"
-        sx={{ borderTopLeftRadius: '0.3em', borderTopRightRadius: '0.3em' }}
+        sx={{ borderTopLeftRadius: '0.3rem', borderTopRightRadius: '0.3rem' }}
       >
         {match[1]}
         <span style={{ cursor: isCodeCopied ? 'auto' : 'pointer' }} onClick={handleCopyCode}>
           {isCodeCopied ? 'Copied' : 'Copy code'}
         </span>
       </Box>
-      <SyntaxHighlighter
-        {...props}
-        style={atomDark}
-        language={match[1]}
-        PreTag="div"
-        customStyle={{ marginTop: 0, borderTopLeftRadius: 0, borderTopRightRadius: 0 }}
-      >
+      <SyntaxHighlighter {...props} style={atomDark} language={match[1]} PreTag="div" customStyle={{ marginTop: 0, borderRadius: '0 0 0.3rem 0.3rem' }}>
         {code}
       </SyntaxHighlighter>
     </div>
