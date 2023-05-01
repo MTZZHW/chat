@@ -12,8 +12,8 @@ type ChatListAreaProps = {
 
 function ChatListArea({ sx, chatLabels }: ChatListAreaProps): JSX.Element {
   return (
-    <Box display="flex" width="260px" sx={sx}>
-      <List component="nav" disablePadding>
+    <Box display="flex" sx={sx}>
+      <List component="nav" disablePadding sx={{ width: '260px' }}>
         <ListItem>
           <Link href="/" passHref legacyBehavior>
             <ListItemButton component="a" sx={{ border: '1px dashed grey' }}>
