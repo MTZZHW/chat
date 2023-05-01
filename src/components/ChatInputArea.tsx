@@ -51,7 +51,7 @@ function ChatInputArea({ sx, onSubmit, disabledSubmit }: ChatInputAreaProps): JS
             onKeyDown={handleTextFieldKeyDown}
             size="small"
           />
-          <Button type="submit" sx={{ ml: '8px' }} variant="contained" disabled={disabledSubmit} size="medium">
+          <Button type="submit" sx={{ ml: '8px' }} variant="contained" disabled={disabledSubmit || !chatContent} size="medium">
             Send
           </Button>
         </Box>
