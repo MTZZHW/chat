@@ -76,7 +76,7 @@ function ChatLayout(): JSX.Element {
 
   return (
     <div style={{ display: 'flex', height: '100vh', width: '100vw' }}>
-      <ChatListArea sx={{ display: 'flex', width: '260px' }} chatLabels={chatLabels} />
+      <ChatListArea chatLabels={chatLabels} />
       <div style={{ height: '100%', width: 'calc(100vw - 260px)', display: 'flex', flexDirection: 'column' }}>
         <ChatDisplayArea
           sx={{

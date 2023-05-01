@@ -1,7 +1,8 @@
 import type { FormEvent, KeyboardEvent, ChangeEvent } from 'react';
 import React, { useState } from 'react';
 import type { SxProps, Theme } from '@mui/material';
-import { Box, Button as MuiButton, TextField, styled } from '@mui/material';
+import { Box, Button as MuiButton, TextField, Divider } from '@mui/material';
+import { styled } from '@mui/material/styles';
 
 const Button = styled(MuiButton)({
   paddingTop: '8px',
@@ -35,24 +36,27 @@ function ChatInputArea({ sx, onSubmit, disabledSubmit }: ChatInputAreaProps): JS
   };
 
   return (
-    <Box p="16px 16px" boxShadow={2} sx={{ ...sx }}>
-      <Box component="form" onSubmit={handleSubmit} display="flex" alignItems="end">
-        <TextField
-          fullWidth
-          variant="outlined"
-          placeholder="Send a message."
-          multiline
-          maxRows={10}
-          value={chatContent}
-          onChange={handleTextFieldChange}
-          onKeyDown={handleTextFieldKeyDown}
-          size="small"
-        />
-        <Button type="submit" sx={{ ml: '8px' }} variant="contained" disabled={disabledSubmit} size="medium">
-          Send
-        </Button>
+    <>
+      <Divider />
+      <Box p="16px" sx={{ ...sx }}>
+        <Box component="form" onSubmit={handleSubmit} display="flex" alignItems="end">
+          <TextField
+            fullWidth
+            variant="outlined"
+            placeholder="Send a message."
+            multiline
+            maxRows={10}
+            value={chatContent}
+            onChange={handleTextFieldChange}
+            onKeyDown={handleTextFieldKeyDown}
+            size="small"
+          />
+          <Button type="submit" sx={{ ml: '8px' }} variant="contained" disabled={disabledSubmit} size="medium">
+            Send
+          </Button>
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 }
 

@@ -1,87 +1,41 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import type { SxProps, Theme } from '@mui/material/styles';
-import { styled, ThemeProvider, createTheme } from '@mui/material/styles';
-import Divider from '@mui/material/Divider';
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import Paper from '@mui/material/Paper';
+import { Divider, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
+import Link from 'next/link';
 import type { ChatLabelType } from '@/hooks/useChatLabels';
 
-const FireNav = styled(List)<{ component?: React.ElementType }>({
-  '& .MuiListItemButton-root': {
-    paddingLeft: 24,
-    paddingRight: 24,
-  },
-  '& .MuiListItemIcon-root': {
-    minWidth: 0,
-    marginRight: 16,
-  },
-  '& .MuiSvgIcon-root': {
-    fontSize: 20,
-  },
-});
-
 type ChatListAreaProps = {
-  sx: SxProps<Theme>;
+  sx?: SxProps<Theme>;
   chatLabels: ChatLabelType[];
 };
 
 function ChatListArea({ sx, chatLabels }: ChatListAreaProps): JSX.Element {
   return (
-    <Box sx={sx}>
-      <ThemeProvider
-        theme={createTheme({
-          components: {
-            MuiListItemButton: {
-              defaultProps: {
-                disableTouchRipple: true,
-              },
-            },
-          },
-          palette: {
-            mode: 'dark',
-            primary: { main: 'rgb(102, 157, 246)' },
-            background: { paper: 'rgb(5, 30, 52)' },
-          },
-        })}
-      >
-        <Paper elevation={0} sx={{ width: '100%', borderRadius: 0 }}>
-          <FireNav component="nav" disablePadding>
-            <ListItemButton component="a" href="/">
-              <ListItemText
-                sx={{ my: 0 }}
-                primary="New Chat"
-                primaryTypographyProps={{
-                  fontSize: 20,
-                  fontWeight: 'medium',
-                  letterSpacing: 0,
-                }}
-              />
+    <Box display="flex" width="260px" sx={sx}>
+      <List component="nav" disablePadding>
+        <ListItem>
+          <Link href="/" passHref legacyBehavior>
+            <ListItemButton component="a" sx={{ border: '1px dashed grey' }}>
+              <ListItemText primaryTypographyProps={{ fontSize: 14, fontWeight: 'bold' }} sx={{ textAlign: 'center' }}>
+                New Chat
+              </ListItemText>
             </ListItemButton>
-            <Divider />
-            <Divider />
-            <Box
-              sx={{
-                bgcolor: 'rgba(71, 98, 130, 0.2)',
-                py: 2,
-              }}
-            >
-              {chatLabels.map((chatLabel) => (
-                <ListItemButton
-                  key={chatLabel.id}
-                  sx={{ py: '8px', minHeight: 32, color: 'rgba(255,255,255,.8)' }}
-                  component="a"
-                  href={`/chat/${chatLabel.id}`}
-                >
-                  <ListItemText primary={chatLabel.label} primaryTypographyProps={{ fontSize: 14, fontWeight: 'medium' }} />
+          </Link>
+        </ListItem>
+        <Box>
+          {chatLabels.map((chatLabel) => (
+            <ListItem key={chatLabel.id}>
+              <Link href={`/chat/${chatLabel.id}`} passHref legacyBehavior>
+                <ListItemButton component="a" sx={{ border: '1px solid grey', width: '227px' }}>
+                  <ListItemText primaryTypographyProps={{ fontSize: 14, fontWeight: 'bold', noWrap: true }}>{chatLabel.label}</ListItemText>
                 </ListItemButton>
-              ))}
-            </Box>
-          </FireNav>
-        </Paper>
-      </ThemeProvider>
+              </Link>
+            </ListItem>
+          ))}
+        </Box>
+      </List>
+      <Divider orientation="vertical" flexItem />
     </Box>
   );
 }
