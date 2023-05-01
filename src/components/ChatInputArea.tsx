@@ -35,7 +35,7 @@ function ChatInputArea({ sx, onSubmit, disabledSubmit }: ChatInputAreaProps): JS
   };
 
   return (
-    <Box p="16px 16px" sx={{ boxShadow: 2, ...sx }}>
+    <Box p="16px 16px" boxShadow={2} sx={{ ...sx }}>
       <Box component="form" onSubmit={handleSubmit} display="flex" alignItems="end">
         <TextField
           fullWidth
