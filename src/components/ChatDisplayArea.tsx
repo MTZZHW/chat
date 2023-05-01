@@ -6,7 +6,7 @@ import Message from './Message';
 import LoadingMessage from './LoadingMessage';
 
 type ChatDisplayAreaProps = {
-  sx: SxProps<Theme>;
+  sx?: SxProps<Theme>;
   messages: ChatCompletionRequestMessage[];
   loading: boolean;
 };
@@ -19,7 +19,18 @@ function ChatDisplayArea({ sx, messages, loading }: ChatDisplayAreaProps): JSX.E
   }, [loading]);
 
   return (
-    <Box sx={sx}>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        boxSizing: 'border-box',
+        height: '100%',
+        width: '100%',
+        p: '24px 16px 0',
+        overflowY: 'auto',
+        ...sx,
+      }}
+    >
       {messages.map((message, index) => (
         <Message key={index} role={message.role} content={message.content} />
       ))}
