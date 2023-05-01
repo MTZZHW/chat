@@ -12,7 +12,7 @@ type ChatListAreaProps = {
 
 function ChatListArea({ sx, chatLabels }: ChatListAreaProps): JSX.Element {
   return (
-    <Box display="flex" sx={sx}>
+    <Box display="flex" overflow="auto" sx={sx}>
       <List component="nav" disablePadding sx={{ width: '256px' }}>
         <ListItem>
           <Link href="/" passHref legacyBehavior>
