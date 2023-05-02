@@ -3,6 +3,7 @@ import '@/styles/globals.css';
 import type { AppProps as AppInitialProps } from 'next/app';
 import { SessionProvider, useSession } from 'next-auth/react';
 import type { Session } from 'next-auth';
+import CssBaseline from '@mui/material/CssBaseline';
 
 type ComponentAuthType = { auth: boolean };
 
@@ -25,6 +26,7 @@ type AppProps = AppInitialProps<{ session: Session }> & { Component: ComponentAu
 function App({ Component, pageProps: { session, ...pageProps } }: AppProps): JSX.Element {
   return (
     <SessionProvider session={session}>
+      <CssBaseline />
       {Component.auth ? (
         <Auth>
           <Component {...pageProps} />

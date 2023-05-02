@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import type { ChatCompletionRequestMessage } from 'openai';
 import { Configuration, OpenAIApi } from 'openai';
+import Box from '@mui/material/Box';
 import services from '../../services';
 import Layout from './Layout';
 import ChatInputArea from '@/components/ChatInputArea';
@@ -77,13 +78,38 @@ function ChatLayout(): JSX.Element {
 
   return (
     <Layout title={`${chatId ? chatId + ' | ' : 'New Chat | '}Chat`}>
-      <div style={{ display: 'flex', height: '100vh', width: '100vw' }}>
+      <Box
+        display="flex"
+        height="100vh"
+        sx={{
+          flexDirection: {
+            xs: 'column',
+            sm: 'column',
+            md: 'row',
+            lg: 'row',
+            xl: 'row',
+          },
+        }}
+      >
         <ChatListArea chatLabels={chatLabels} />
-        <div style={{ height: '100%', width: 'calc(100vw - 256px)', display: 'flex', flexDirection: 'column' }}>
+        <Box
+          display="flex"
+          flexDirection="column"
+          width="100%"
+          sx={{
+            maxWidth: {
+              xs: '100vw',
+              sm: '100vw',
+              md: 'calc(100vw - 256px)',
+              lg: 'calc(100vw - 256px)',
+              xl: 'calc(100vw - 256px)',
+            },
+          }}
+        >
           <ChatDisplayArea loading={isSendingMessage} messages={messages} />
           <ChatInputArea onSubmit={sendConversationRequest} disabledSubmit={isSendingMessage} />
-        </div>
-      </div>
+        </Box>
+      </Box>
     </Layout>
   );
 }
