@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Box from '@mui/material/Box';
-import { AppBar, Drawer, IconButton, Toolbar, Typography } from '@mui/material';
+import { AppBar, Divider, Drawer, IconButton, Toolbar, Typography } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AddIcon from '@mui/icons-material/Add';
 import Link from 'next/link';
@@ -71,7 +71,10 @@ function ChatListArea({ chatLabels, window }: ChatListAreaProps): JSX.Element {
             '& .MuiDrawer-paper': { boxSizing: 'border-box', width: `${drawerWidth}px` },
           }}
         >
-          <ChatList chatLabels={chatLabels} />
+          <ChatList chatLabels={chatLabels}>
+            <Toolbar />
+            <Divider />
+          </ChatList>
         </Drawer>
         <Drawer
           variant="permanent"

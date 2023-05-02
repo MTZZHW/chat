@@ -7,7 +7,7 @@ import type { ChatLabelType } from '@/hooks/useChatLabels';
 
 type ChatListProps = {
   chatLabels: ChatLabelType[];
-  children?: JSX.Element;
+  children?: JSX.Element | JSX.Element[];
 };
 
 function ChatList({ chatLabels, children }: ChatListProps): JSX.Element {
