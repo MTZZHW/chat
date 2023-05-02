@@ -25,9 +25,8 @@ function ChatListArea({ chatLabels, window }: ChatListAreaProps): JSX.Element {
   };
 
   return (
-    <Box>
+    <Box sx={{ height: '56px' }}>
       <AppBar
-        position="fixed"
         sx={{
           display: {
             xs: 'block',
