@@ -39,7 +39,13 @@ function CodeBlock({ inline, className, children, ...props }: CodeBlockProps): J
           {isCodeCopied ? 'Copied' : 'Copy code'}
         </span>
       </Box>
-      <SyntaxHighlighter {...props} style={atomDark} language={match[1]} PreTag="div" customStyle={{ marginTop: 0, borderRadius: '0 0 0.3rem 0.3rem' }}>
+      <SyntaxHighlighter
+        {...props}
+        style={atomDark}
+        language={match[1]}
+        PreTag="div"
+        customStyle={{ marginTop: 0, borderRadius: '0 0 0.3rem 0.3rem', width: 'calc(100vw - 64px)' }}
+      >
         {code}
       </SyntaxHighlighter>
     </div>
