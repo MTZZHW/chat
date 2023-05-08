@@ -1,11 +1,11 @@
 import axios from 'axios';
 import type { ResponseType } from './@types';
 import type { ChatsCreateRequestBody, ChatsCreateResponseBody, ChatsUpdateRequestBody, ChatsUpdateResponseBody } from '@/pages/api/chats';
-import type { ChatsFetchRequestBody, ChatsFetchResponseBody } from '@/pages/api/chats/[userId]';
-import type { ChatsDetailFetchRequestBody, ChatsDetailFetchResponseBody } from '@/pages/api/chats/detail/[id]';
+import type { ChatsFetchRequestBody, ChatsFetchResponseBody } from '@/pages/api/users/[userId]/chats';
+import type { ChatsDetailFetchRequestBody, ChatsDetailFetchResponseBody } from '@/pages/api/chats/[id]';
 
 const fetchChats = (params: ChatsFetchRequestBody): Promise<ResponseType<ChatsFetchResponseBody>> => {
-  return axios.get(process.env.NEXT_PUBLIC_API_SERVER + `/api/chats/${params.userId}`).then((response) => {
+  return axios.get(process.env.NEXT_PUBLIC_API_SERVER + `/api/users/${params.userId}/chats`).then((response) => {
     return response.data;
   });
 };
@@ -22,8 +22,8 @@ const updateChat = (params: ChatsUpdateRequestBody): Promise<ResponseType<ChatsU
   });
 };
 
-const fetchChatDetail = (params: ChatsDetailFetchRequestBody): Promise<ResponseType<ChatsDetailFetchResponseBody>> => {
-  return axios.get(process.env.NEXT_PUBLIC_API_SERVER + `/api/chats/detail/${params.id}`).then((response) => {
+const fetchChat = (params: ChatsDetailFetchRequestBody): Promise<ResponseType<ChatsDetailFetchResponseBody>> => {
+  return axios.get(process.env.NEXT_PUBLIC_API_SERVER + `/api/chats/${params.id}`).then((response) => {
     return response.data;
   });
 };
@@ -32,7 +32,7 @@ const services = {
   fetchChats,
   createChat,
   updateChat,
-  fetchChatDetail,
+  fetchChat,
 };
 
 export default services;

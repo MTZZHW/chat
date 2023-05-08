@@ -29,7 +29,7 @@ function ChatLayout(): JSX.Element {
   useEffect(() => {
     (async (): Promise<void> => {
       if (chatId) {
-        const { success, data } = await services.fetchChatDetail({ id: chatId });
+        const { success, data } = await services.fetchChat({ id: chatId });
         if (success && data) {
           setMessages(data.messages);
         }

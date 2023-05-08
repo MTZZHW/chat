@@ -3,9 +3,9 @@ import type { Chat } from '@prisma/client';
 import type { ResponseType } from '../../../../../services/@types';
 import { ChatDao } from '../../../../../server/dao';
 
-export type ChatsDetailFetchRequestBody = Omit<Chat, 'userId' | 'messages' | 'createdAt' | 'updatedAt' | 'label'>;
+export type ChatsFetchRequestBody = Omit<Chat, 'id' | 'messages' | 'createdAt' | 'updatedAt' | 'label' | 'userId'> & Record<'userId', string>;
 
-export type ChatsDetailFetchResponseBody = Omit<Chat, 'userId'>;
+export type ChatsFetchResponseBody = Omit<Chat, 'userId' | 'messages'>[];
 
 const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   switch (req.method) {
@@ -18,15 +18,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void>
   }
 };
 
-const fetchHandler = async (req: NextApiRequest, res: NextApiResponse<ResponseType<ChatsDetailFetchResponseBody>>): Promise<void> => {
-  const { id } = req.query as ChatsDetailFetchRequestBody;
+const fetchHandler = async (req: NextApiRequest, res: NextApiResponse<ResponseType<ChatsFetchResponseBody>>): Promise<void> => {
+  const { userId } = req.query as unknown as ChatsFetchRequestBody;
 
   try {
-    const chat = await ChatDao.findOneRaw({
-      where: { id },
+    const chats = await ChatDao.findAll({
+      where: { userId: parseInt(userId) },
     });
 
-    res.status(200).json({ success: true, message: 'Success', data: chat });
+    res.status(200).json({ success: true, message: 'Success', data: chats });
   } catch (error) {
     res.status(200).json({ success: false, message: (error as Error).message });
   }
