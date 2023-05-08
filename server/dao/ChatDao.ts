@@ -9,6 +9,7 @@ export class ChatDao {
         select: {
           id: true,
           messages: false,
+          label: true,
           userId: false,
           createdAt: true,
           updatedAt: true,
@@ -28,6 +29,7 @@ export class ChatDao {
         select: {
           id: true,
           messages: true,
+          label: false,
           userId: false,
           createdAt: true,
           updatedAt: true,

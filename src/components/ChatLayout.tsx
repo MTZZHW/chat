@@ -62,7 +62,7 @@ function ChatLayout(): JSX.Element {
         const { success, data } = await services.createChat({ userId: user.id, messages: updatedMessages });
 
         if (success && data) {
-          const newChatLabel: ChatLabelType = { id: data.id, label: data.id };
+          const newChatLabel: ChatLabelType = { id: data.id, label: data.label };
           addChatLabel(newChatLabel);
           setChatId(data.id);
         }

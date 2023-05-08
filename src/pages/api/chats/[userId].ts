@@ -3,9 +3,9 @@ import type { Chat } from '@prisma/client';
 import type { ResponseType } from '../../../../services/@types';
 import { ChatDao } from '../../../../server/dao';
 
-export type ChatsFetchRequestBody = Omit<Chat, 'id' | 'messages' | 'createdAt' | 'updatedAt' | 'userId'> & Record<'userId', string>;
+export type ChatsFetchRequestBody = Omit<Chat, 'id' | 'messages' | 'createdAt' | 'updatedAt' | 'label' | 'userId'> & Record<'userId', string>;
 
-export type ChatsFetchResponseBody = (Omit<Chat, 'userId' | 'messages'> & { label: string })[];
+export type ChatsFetchResponseBody = Omit<Chat, 'userId' | 'messages'>[];
 
 const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   switch (req.method) {
@@ -26,7 +26,7 @@ const fetchHandler = async (req: NextApiRequest, res: NextApiResponse<ResponseTy
       where: { userId: parseInt(userId) },
     });
 
-    res.status(200).json({ success: true, message: 'Success', data: chats.map((chat) => ({ ...chat, label: chat.id })) });
+    res.status(200).json({ success: true, message: 'Success', data: chats });
   } catch (error) {
     res.status(200).json({ success: false, message: (error as Error).message });
   }

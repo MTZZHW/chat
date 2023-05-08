@@ -3,11 +3,11 @@ import type { Chat } from '@prisma/client';
 import { ChatDao } from '../../../../server/dao';
 import type { ResponseType } from '../../../../services/@types';
 
-export type ChatsCreateRequestBody = Omit<Chat, 'id' | 'createdAt' | 'updatedAt' | 'userId'> & Record<'userId', string>;
+export type ChatsCreateRequestBody = Omit<Chat, 'id' | 'createdAt' | 'updatedAt' | 'label' | 'userId'> & Record<'userId', string>;
 
 export type ChatsCreateResponseBody = Omit<Chat, 'userId' | 'messages'>;
 
-export type ChatsUpdateRequestBody = Omit<Chat, 'userId' | 'createdAt' | 'updatedAt'>;
+export type ChatsUpdateRequestBody = Omit<Chat, 'userId' | 'createdAt' | 'updatedAt' | 'label'>;
 
 export type ChatsUpdateResponseBody = undefined;
 
@@ -29,7 +29,7 @@ const postHandler = async (req: NextApiRequest, res: NextApiResponse<ResponseTyp
   const { userId, messages } = req.body as ChatsCreateRequestBody;
 
   try {
-    const chat = await ChatDao.create({ userId: parseInt(userId), messages });
+    const chat = await ChatDao.create({ userId: parseInt(userId), messages, label: messages[0].content.substring(0, 20) });
 
     res.status(200).json({ success: true, message: 'Success', data: chat });
   } catch (error) {

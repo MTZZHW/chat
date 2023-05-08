@@ -3,7 +3,7 @@ import type { Chat } from '@prisma/client';
 import type { ResponseType } from '../../../../../services/@types';
 import { ChatDao } from '../../../../../server/dao';
 
-export type ChatsDetailFetchRequestBody = Omit<Chat, 'userId' | 'messages' | 'createdAt' | 'updatedAt'>;
+export type ChatsDetailFetchRequestBody = Omit<Chat, 'userId' | 'messages' | 'createdAt' | 'updatedAt' | 'label'>;
 
 export type ChatsDetailFetchResponseBody = Omit<Chat, 'userId'>;
 
