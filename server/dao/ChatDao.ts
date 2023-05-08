@@ -1,74 +1,68 @@
-import type { FindOptions, UpdateOptions } from 'sequelize';
-import { ValidationError } from 'sequelize';
-import { Chat, accessPreOperation } from '../models';
-import type { ModelData } from '../models/definitions/BaseModel';
+import type { Prisma } from '@prisma/client';
+import type { Chat } from '@prisma/client';
+import prisma from '../../lib/prisma';
 
 export class ChatDao {
-  public static async findAll(ignoreAccessPreOperation: boolean, options: FindOptions): Promise<ModelData<Chat>[]> {
-    return await accessPreOperation<ModelData<Chat>[]>(ignoreAccessPreOperation, async () => {
-      try {
-        const rawData = await Chat.findAll({
-          attributes: {
-            exclude: ['messages', 'userId'],
-          },
-          ...options,
-        });
-        const data = rawData.map((rawDataItem) => rawDataItem.toJSON());
+  public static async findAll(options: Prisma.ChatFindManyArgs): Promise<Omit<Chat, 'userId' | 'messages'>[]> {
+    try {
+      const data = await prisma.chat.findMany({
+        select: {
+          id: true,
+          messages: false,
+          userId: false,
+          createdAt: true,
+          updatedAt: true,
+        },
+        ...options,
+      });
 
-        return data;
-      } catch (error) {
-        throw new Error(`${error}`);
-      }
-    });
+      return data as Omit<Chat, 'userId' | 'messages'>[];
+    } catch (error) {
+      throw new Error(`${error}`);
+    }
   }
 
-  public static async findOneRaw(ignoreAccessPreOperation: boolean, options: FindOptions): Promise<ModelData<Chat>> {
-    return await accessPreOperation<ModelData<Chat>>(ignoreAccessPreOperation, async () => {
-      try {
-        const rawData = await Chat.findOne({
-          attributes: {
-            exclude: ['userId'],
-          },
-          ...options,
-        });
+  public static async findOneRaw(options: Prisma.ChatFindUniqueArgs): Promise<Omit<Chat, 'userId'>> {
+    try {
+      const data = await prisma.chat.findUnique({
+        select: {
+          id: true,
+          messages: true,
+          userId: false,
+          createdAt: true,
+          updatedAt: true,
+        },
+        ...options,
+      });
 
-        if (!rawData) {
-          throw Error('Not Found');
-        }
-
-        return rawData.toJSON();
-      } catch (error) {
-        throw new Error(`${error}`);
+      if (!data) {
+        throw Error('Not Found');
       }
-    });
+
+      return data as Omit<Chat, 'userId'>;
+    } catch (error) {
+      throw new Error(`${error}`);
+    }
   }
 
-  public static async create(ignoreAccessPreOperation: boolean, values: ModelData<Chat>): Promise<Chat> {
-    return await accessPreOperation<Chat>(ignoreAccessPreOperation, async () => {
-      try {
-        return await Chat.create(values);
-      } catch (error) {
-        if (error instanceof ValidationError) {
-          const { message, errors } = error as ValidationError;
-          throw new Error(`Error: ${message}, ${errors[0].message}`);
-        }
+  public static async create(values: Prisma.XOR<Prisma.ChatCreateInput, Prisma.ChatUncheckedCreateInput>): Promise<Chat> {
+    try {
+      const data = await prisma.chat.create({ data: values });
 
-        throw new Error(`${error}`);
-      }
-    });
+      return data;
+    } catch (error) {
+      throw new Error(`${error}`);
+    }
   }
 
   public static async update(
-    ignoreAccessPreOperation: boolean,
-    values: Omit<ModelData<Chat>, 'id' | 'userId'>,
-    options: UpdateOptions<ModelData<Chat>>
+    values: Prisma.XOR<Prisma.ChatUpdateInput, Prisma.ChatUncheckedUpdateInput>,
+    options: Omit<Prisma.ChatUpdateArgs, 'data'>
   ): Promise<void> {
-    return await accessPreOperation<void>(ignoreAccessPreOperation, async () => {
-      try {
-        await Chat.update(values, options);
-      } catch (error) {
-        throw new Error(`${error}`);
-      }
-    });
+    try {
+      await prisma.chat.update({ data: values, ...options });
+    } catch (error) {
+      throw new Error(`${error}`);
+    }
   }
 }

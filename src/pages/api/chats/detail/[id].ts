@@ -1,12 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import type { ModelData } from '../../../../../server/models/definitions/BaseModel';
-import type { Chat } from '../../../../../server/models';
+import type { Chat } from '@prisma/client';
 import type { ResponseType } from '../../../../../services/@types';
 import { ChatDao } from '../../../../../server/dao';
 
-export type ChatsDetailFetchRequestBody = Omit<ModelData<Chat>, 'userId' | 'messages'>;
+export type ChatsDetailFetchRequestBody = Omit<Chat, 'userId' | 'messages' | 'createdAt' | 'updatedAt'>;
 
-export type ChatsDetailFetchResponseBody = Omit<ModelData<Chat>, 'userId'>;
+export type ChatsDetailFetchResponseBody = Omit<Chat, 'userId'>;
 
 const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   switch (req.method) {
@@ -23,7 +22,7 @@ const fetchHandler = async (req: NextApiRequest, res: NextApiResponse<ResponseTy
   const { id } = req.query as ChatsDetailFetchRequestBody;
 
   try {
-    const chat = await ChatDao.findOneRaw(false, {
+    const chat = await ChatDao.findOneRaw({
       where: { id },
     });
 

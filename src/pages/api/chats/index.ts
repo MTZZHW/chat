@@ -1,15 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { v4 as uuid } from 'uuid';
-import type { Chat } from '../../../../server/models';
-import type { ModelData } from '../../../../server/models/definitions/BaseModel';
+import type { Chat } from '@prisma/client';
 import { ChatDao } from '../../../../server/dao';
 import type { ResponseType } from '../../../../services/@types';
 
-export type ChatsCreateRequestBody = Omit<ModelData<Chat>, 'id'>;
+export type ChatsCreateRequestBody = Omit<Chat, 'id' | 'createdAt' | 'updatedAt' | 'userId'> & Record<'userId', string>;
 
-export type ChatsCreateResponseBody = Omit<ModelData<Chat>, 'userId' | 'messages'>;
+export type ChatsCreateResponseBody = Omit<Chat, 'userId' | 'messages'>;
 
-export type ChatsUpdateRequestBody = Omit<ModelData<Chat>, 'userId'>;
+export type ChatsUpdateRequestBody = Omit<Chat, 'userId'>;
 
 export type ChatsUpdateResponseBody = undefined;
 
@@ -31,9 +29,9 @@ const postHandler = async (req: NextApiRequest, res: NextApiResponse<ResponseTyp
   const { userId, messages } = req.body as ChatsCreateRequestBody;
 
   try {
-    const chat = await ChatDao.create(false, { id: uuid(), userId, messages });
+    const chat = await ChatDao.create({ userId: parseInt(userId), messages });
 
-    res.status(200).json({ success: true, message: 'Success', data: { id: chat.id } });
+    res.status(200).json({ success: true, message: 'Success', data: chat });
   } catch (error) {
     res.status(200).json({ success: false, message: (error as Error).message });
   }
@@ -43,7 +41,7 @@ const putHandler = async (req: NextApiRequest, res: NextApiResponse<ResponseType
   const { id, messages } = req.body as ChatsUpdateRequestBody;
 
   try {
-    await ChatDao.update(false, { messages }, { where: { id } });
+    await ChatDao.update({ messages }, { where: { id } });
 
     res.status(200).json({ success: true, message: 'Success' });
   } catch (error) {
