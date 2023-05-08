@@ -7,7 +7,7 @@ export type ChatsCreateRequestBody = Omit<Chat, 'id' | 'createdAt' | 'updatedAt'
 
 export type ChatsCreateResponseBody = Omit<Chat, 'userId' | 'messages'>;
 
-export type ChatsUpdateRequestBody = Omit<Chat, 'userId'>;
+export type ChatsUpdateRequestBody = Omit<Chat, 'userId' | 'createdAt' | 'updatedAt'>;
 
 export type ChatsUpdateResponseBody = undefined;
 
