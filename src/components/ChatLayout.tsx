@@ -30,8 +30,9 @@ function ChatLayout({ initialChatLabels, initialMessages, initialChatId, user }:
   const { chatLabels, addChatLabel } = useChatLabels(initialChatLabels);
 
   useEffect(() => {
+    setChatId(initialChatId);
     setMessages(initialMessages);
-  }, [initialMessages]);
+  }, [initialChatId, initialMessages]);
 
   const sendConversationRequest = async (chatContent: string): Promise<void> => {
     const newMessages: ChatCompletionRequestMessage[] = [
