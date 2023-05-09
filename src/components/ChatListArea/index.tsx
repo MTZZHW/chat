@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import { AppBar, Divider, Drawer, IconButton, Toolbar, Typography } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import AddIcon from '@mui/icons-material/Add';
-import Link from 'next/link';
 import NewChatButton from './NewChatButton';
 import ChatList from './ChatList';
 import type { ChatLabelType } from '@/hooks/useChatLabels';
@@ -44,11 +42,7 @@ function ChatListArea({ chatLabels, window }: ChatListAreaProps): JSX.Element {
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             Chat
           </Typography>
-          <Link href="/" passHref legacyBehavior>
-            <IconButton component="a" color="inherit" edge="end">
-              <AddIcon />
-            </IconButton>
-          </Link>
+          <NewChatButton />
         </Toolbar>
       </AppBar>
       <Box sx={{ width: `${drawerWidth}px` }}>
