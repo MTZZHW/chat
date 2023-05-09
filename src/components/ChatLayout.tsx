@@ -3,39 +3,35 @@ import type { ChatCompletionRequestMessage } from 'openai';
 import { Configuration, OpenAIApi } from 'openai';
 import Box from '@mui/material/Box';
 import services from '../../services';
-import Layout from './Layout';
 import ChatInputArea from '@/components/ChatInputArea';
 import ChatDisplayArea from '@/components/ChatDisplayArea';
 import ChatListArea from '@/components/ChatListArea';
 import type { ChatLabelType } from '@/hooks/useChatLabels';
 import useChatLabels from '@/hooks/useChatLabels';
-import useUser from '@/hooks/useUser';
-import useRouterQuery from '@/hooks/useRouterQuery';
+import type { UserType } from '@/hooks/useUser';
 
 const configuration = new Configuration({
   apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
 
-function ChatLayout(): JSX.Element {
-  const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
+type ChatLayoutProps = {
+  initialChatLabels: ChatLabelType[];
+  initialMessages: ChatCompletionRequestMessage[];
+  initialChatId: string;
+  user: UserType;
+};
+
+function ChatLayout({ initialChatLabels, initialMessages, initialChatId, user }: ChatLayoutProps): JSX.Element {
   const [isSendingMessage, setIsSendingMessage] = useState<boolean>(false);
+  const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>(initialMessages);
+  const [chatId, setChatId] = useState<string>(initialChatId);
 
-  const { user } = useUser();
-  const { chatLabels, addChatLabel } = useChatLabels();
-
-  const [chatId, setChatId] = useRouterQuery();
+  const { chatLabels, addChatLabel } = useChatLabels(initialChatLabels);
 
   useEffect(() => {
-    (async (): Promise<void> => {
-      if (chatId) {
-        const { success, data } = await services.fetchChat({ id: chatId });
-        if (success && data) {
-          setMessages(data.messages);
-        }
-      }
-    })();
-  }, [chatId]);
+    setMessages(initialMessages);
+  }, [initialMessages]);
 
   const sendConversationRequest = async (chatContent: string): Promise<void> => {
     const newMessages: ChatCompletionRequestMessage[] = [
@@ -58,8 +54,7 @@ function ChatLayout(): JSX.Element {
       const updatedMessages: ChatCompletionRequestMessage[] = [...newMessages, completion.data.choices[0].message];
 
       if (!chatId) {
-        console.log(chatId);
-        const { success, data } = await services.createChat({ userId: user.id, messages: updatedMessages });
+        const { success, data } = await services.createChat({ userId: user.id.toString(), messages: updatedMessages });
 
         if (success && data) {
           const newChatLabel: ChatLabelType = { id: data.id, label: data.label };
@@ -77,41 +72,39 @@ function ChatLayout(): JSX.Element {
   };
 
   return (
-    <Layout title={`${chatId ? chatId + ' | ' : 'New Chat | '}Chat`}>
+    <Box
+      display="flex"
+      height="100vh"
+      sx={{
+        flexDirection: {
+          xs: 'column',
+          sm: 'column',
+          md: 'row',
+          lg: 'row',
+          xl: 'row',
+        },
+      }}
+    >
+      <ChatListArea chatLabels={chatLabels} />
       <Box
         display="flex"
-        height="100vh"
+        flexDirection="column"
+        height="100%"
+        width="100%"
         sx={{
-          flexDirection: {
-            xs: 'column',
-            sm: 'column',
-            md: 'row',
-            lg: 'row',
-            xl: 'row',
+          maxWidth: {
+            xs: '100vw',
+            sm: '100vw',
+            md: 'calc(100vw - 256px)',
+            lg: 'calc(100vw - 256px)',
+            xl: 'calc(100vw - 256px)',
           },
         }}
       >
-        <ChatListArea chatLabels={chatLabels} />
-        <Box
-          display="flex"
-          flexDirection="column"
-          height="100%"
-          width="100%"
-          sx={{
-            maxWidth: {
-              xs: '100vw',
-              sm: '100vw',
-              md: 'calc(100vw - 256px)',
-              lg: 'calc(100vw - 256px)',
-              xl: 'calc(100vw - 256px)',
-            },
-          }}
-        >
-          <ChatDisplayArea loading={isSendingMessage} messages={messages} />
-          <ChatInputArea onSubmit={sendConversationRequest} disabledSubmit={isSendingMessage} />
-        </Box>
+        <ChatDisplayArea loading={isSendingMessage} messages={messages} />
+        <ChatInputArea onSubmit={sendConversationRequest} disabledSubmit={isSendingMessage} />
       </Box>
-    </Layout>
+    </Box>
   );
 }
 

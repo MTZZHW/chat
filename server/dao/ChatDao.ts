@@ -3,7 +3,7 @@ import type { Chat } from '@prisma/client';
 import prisma from '../../lib/prisma';
 
 export class ChatDao {
-  public static async findAll(options: Prisma.ChatFindManyArgs): Promise<Omit<Chat, 'userId' | 'messages'>[]> {
+  public static async findAll(options: Prisma.ChatFindManyArgs): Promise<Omit<Chat, 'userId' | 'messages' | 'createdAt' | 'updatedAt'>[]> {
     try {
       const data = await prisma.chat.findMany({
         select: {
@@ -11,8 +11,8 @@ export class ChatDao {
           messages: false,
           label: true,
           userId: false,
-          createdAt: true,
-          updatedAt: true,
+          createdAt: false,
+          updatedAt: false,
         },
         ...options,
       });
@@ -23,16 +23,16 @@ export class ChatDao {
     }
   }
 
-  public static async findOneRaw(options: Prisma.ChatFindUniqueArgs): Promise<Omit<Chat, 'userId'>> {
+  public static async findOneRaw(options: Prisma.ChatFindUniqueArgs): Promise<Omit<Chat, 'userId' | 'createdAt' | 'updatedAt'>> {
     try {
       const data = await prisma.chat.findUnique({
         select: {
           id: true,
           messages: true,
-          label: false,
+          label: true,
           userId: false,
-          createdAt: true,
-          updatedAt: true,
+          createdAt: false,
+          updatedAt: false,
         },
         ...options,
       });

@@ -1,7 +1,7 @@
 import { useSession } from 'next-auth/react';
 
-type UserType = {
-  id: string;
+export type UserType = {
+  id: number;
   username: string;
 };
 
@@ -15,7 +15,7 @@ function useUser(): UseUserHookType {
 
   if (status === 'loading') {
     return {
-      user: { id: '', username: '' },
+      user: { id: 0, username: '' },
       status,
     };
   }
