@@ -10,13 +10,10 @@ const drawerWidth = 256;
 
 type ChatListAreaProps = {
   chatLabels: ChatLabelType[];
-  window?: () => Window;
 };
 
-function ChatListArea({ chatLabels, window }: ChatListAreaProps): JSX.Element {
+function ChatListArea({ chatLabels }: ChatListAreaProps): JSX.Element {
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
-
-  const container = window !== undefined ? (): HTMLElement => window().document.body : undefined;
 
   const handleDrawerToggle = (): void => {
     setMobileOpen(!mobileOpen);
@@ -47,7 +44,6 @@ function ChatListArea({ chatLabels, window }: ChatListAreaProps): JSX.Element {
       </AppBar>
       <Box sx={{ width: `${drawerWidth}px` }}>
         <Drawer
-          container={container}
           variant="temporary"
           open={mobileOpen}
           onClose={handleDrawerToggle}
