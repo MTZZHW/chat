@@ -1,10 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import type { Chat } from '@prisma/client';
-import { v4 as uuid } from 'uuid';
 import { ChatDao } from '../../../../server/dao';
 import type { ResponseType } from '../../../../services/@types';
 import type { MessageType } from '../../../../types/chat';
-import openai from '../../../../lib/openai';
+import services from '../../../../services';
 
 export type ChatsCreateRequestBody = Omit<Chat, 'id' | 'createdAt' | 'updatedAt' | 'label' | 'userId'> & Record<'userId', string>;
 
@@ -34,32 +33,9 @@ const postHandler = async (req: NextApiRequest, res: NextApiResponse<ResponseTyp
   let newMessages: MessageType[];
 
   try {
-    const completion = await openai.createChatCompletion({
-      model: 'gpt-3.5-turbo',
-      messages: messages.map((message) => {
-        return {
-          role: message.role,
-          content: message.content,
-        };
-      }),
-      stream: false,
-    });
-
-    if (completion.data.choices[0].message) {
-      newMessages = [
-        ...messages,
-        {
-          ...completion.data.choices[0].message,
-          createdAt: new Date(),
-          id: uuid(),
-        },
-      ];
-    } else {
-      res.status(200).json({ success: false, message: `Unknown error` });
-      return;
-    }
+    newMessages = await services.invokeOpenai(messages);
   } catch (error) {
-    res.status(200).json({ success: false, message: `Openai: ${error}` });
+    res.status(200).json({ success: false, message: (error as Error).message });
     return;
   }
 
@@ -82,31 +58,9 @@ const putHandler = async (req: NextApiRequest, res: NextApiResponse<ResponseType
   let newMessages: MessageType[];
 
   try {
-    const completion = await openai.createChatCompletion({
-      model: 'gpt-3.5-turbo',
-      messages: messages.map((message) => {
-        return {
-          role: message.role,
-          content: message.content,
-        };
-      }),
-    });
-
-    if (completion.data.choices[0].message) {
-      newMessages = [
-        ...messages,
-        {
-          ...completion.data.choices[0].message,
-          createdAt: new Date(),
-          id: uuid(),
-        },
-      ];
-    } else {
-      res.status(200).json({ success: false, message: `unknown error` });
-      return;
-    }
+    newMessages = await services.invokeOpenai(messages);
   } catch (error) {
-    res.status(200).json({ success: false, message: `${error}` });
+    res.status(200).json({ success: false, message: (error as Error).message });
     return;
   }
 

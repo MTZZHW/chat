@@ -1,4 +1,7 @@
 import axios from 'axios';
+import { v4 as uuid } from 'uuid';
+import openai from '../lib/openai';
+import type { MessageType } from '../types/chat';
 import type { ResponseType } from './@types';
 import type { ChatsCreateRequestBody, ChatsCreateResponseBody, ChatsUpdateRequestBody, ChatsUpdateResponseBody } from '@/pages/api/chats';
 import type { ChatsFetchRequestBody, ChatsFetchResponseBody } from '@/pages/api/users/[userId]/chats';
@@ -28,11 +31,45 @@ const fetchChat = (params: ChatsDetailFetchRequestBody): Promise<ResponseType<Ch
   });
 };
 
+const invokeOpenai = async (messages: MessageType[]): Promise<MessageType[]> => {
+  let newMessages: MessageType[];
+
+  try {
+    const completion = await openai.createChatCompletion({
+      model: 'gpt-3.5-turbo',
+      messages: messages.map((message) => {
+        return {
+          role: message.role,
+          content: message.content,
+        };
+      }),
+    });
+
+    if (completion.data.choices[0].message) {
+      newMessages = [
+        ...messages,
+        {
+          ...completion.data.choices[0].message,
+          createdAt: new Date(),
+          id: uuid(),
+        },
+      ];
+
+      return newMessages;
+    } else {
+      throw new Error('Openai: Unknown error');
+    }
+  } catch (error) {
+    throw new Error(`Openai: ${error}`);
+  }
+};
+
 const services = {
   fetchChats,
   createChat,
   updateChat,
   fetchChat,
+  invokeOpenai,
 };
 
 export default services;
