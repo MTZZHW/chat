@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Configuration, OpenAIApi } from 'openai';
 import Box from '@mui/material/Box';
 import { v4 as uuid } from 'uuid';
 import services from '../../services';
@@ -10,11 +9,6 @@ import ChatListArea from '@/components/ChatListArea';
 import type { ChatLabelType } from '@/hooks/useChatLabels';
 import useChatLabels from '@/hooks/useChatLabels';
 import type { UserType } from '@/hooks/useUser';
-
-const configuration = new Configuration({
-  apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
-});
-const openai = new OpenAIApi(configuration);
 
 type ChatLayoutProps = {
   initialChatLabels: ChatLabelType[];
@@ -49,39 +43,26 @@ function ChatLayout({ initialChatLabels, initialMessages, initialChatId, user }:
     setMessages(newMessages);
     setIsSendingMessage(true);
 
-    const completion = await openai.createChatCompletion({
-      model: 'gpt-3.5-turbo',
-      messages: newMessages.map((message) => {
-        return {
-          role: message.role,
-          content: message.content,
-        };
-      }),
-    });
+    if (!chatId) {
+      const { success, data } = await services.createChat({
+        userId: user.id.toString(),
+        messages: newMessages,
+      });
 
-    if (completion.data.choices[0].message) {
-      const updatedMessages: MessageType[] = [
-        ...newMessages,
-        {
-          ...completion.data.choices[0].message,
-          createdAt: new Date(),
-          id: uuid(),
-        },
-      ];
-
-      if (!chatId) {
-        const { success, data } = await services.createChat({ userId: user.id.toString(), messages: updatedMessages });
-
-        if (success && data) {
-          const newChatLabel: ChatLabelType = { id: data.id, label: data.label };
-          addChatLabel(newChatLabel);
-          setChatId(data.id);
-        }
-      } else {
-        await services.updateChat({ id: chatId, messages: updatedMessages });
+      if (success && data) {
+        addChatLabel({ id: data.id, label: data.label });
+        setMessages(data.messages);
+        setChatId(data.id);
       }
+    } else {
+      const { success, data } = await services.updateChat({
+        id: chatId,
+        messages: newMessages,
+      });
 
-      setMessages(updatedMessages);
+      if (success && data) {
+        setMessages(data.messages);
+      }
     }
 
     setIsSendingMessage(false);

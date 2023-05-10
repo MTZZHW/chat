@@ -60,9 +60,11 @@ export class ChatDao {
   public static async update(
     values: Prisma.XOR<Prisma.ChatUpdateInput, Prisma.ChatUncheckedUpdateInput>,
     options: Omit<Prisma.ChatUpdateArgs, 'data'>
-  ): Promise<void> {
+  ): Promise<Chat> {
     try {
-      await prisma.chat.update({ data: values, ...options });
+      const data = await prisma.chat.update({ data: values, ...options });
+
+      return data;
     } catch (error) {
       throw new Error(`${error}`);
     }
