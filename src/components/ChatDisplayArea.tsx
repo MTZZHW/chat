@@ -1,13 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 import type { SxProps, Theme } from '@mui/material';
 import { Box } from '@mui/material';
-import type { ChatCompletionRequestMessage } from 'openai';
+import type { MessageType } from '../../types/chat';
 import Message from './Message';
-import LoadingMessage from './LoadingMessage';
+import LoadingMessage from './Message/LoadingMessage';
 
 type ChatDisplayAreaProps = {
   sx?: SxProps<Theme>;
-  messages: ChatCompletionRequestMessage[];
+  messages: MessageType[];
   loading: boolean;
 };
 
@@ -31,8 +31,8 @@ function ChatDisplayArea({ sx, messages, loading }: ChatDisplayAreaProps): JSX.E
         ...sx,
       }}
     >
-      {messages.map((message, index) => (
-        <Message key={index} role={message.role} content={message.content} />
+      {messages.map((message) => (
+        <Message key={message.id} message={message} />
       ))}
       {loading ? <LoadingMessage /> : null}
       <div ref={ref} />

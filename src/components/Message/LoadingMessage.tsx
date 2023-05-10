@@ -1,5 +1,6 @@
 import { grey } from '@mui/material/colors';
 import React, { useEffect, useState } from 'react';
+import MessageLayout from './MessageLayout';
 
 function Message(): JSX.Element {
   const [loadingText, setLoadingText] = useState('Loading');
@@ -18,19 +19,9 @@ function Message(): JSX.Element {
   }, []);
 
   return (
-    <div>
-      <div
-        style={{
-          float: 'left',
-          background: grey[100],
-          padding: '0 16px',
-          borderRadius: '0.3rem',
-          marginBottom: 16,
-        }}
-      >
-        <p>{loadingText}</p>
-      </div>
-    </div>
+    <MessageLayout bgcolor={grey[100]} position="left">
+      <p>{loadingText}</p>
+    </MessageLayout>
   );
 }
 

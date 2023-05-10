@@ -1,8 +1,8 @@
-import type { ChatCompletionRequestMessage } from 'openai';
+import type { MessageType } from '../../types/chat';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace PrismaJson {
-    type MessageType = ChatCompletionRequestMessage;
+    type Message = MessageType;
   }
 }
