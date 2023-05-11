@@ -1,10 +1,10 @@
 import React from 'react';
 import Box from '@mui/material/Box';
-import type green from '@mui/material/colors/green';
+import type blue from '@mui/material/colors/blue';
 import type grey from '@mui/material/colors/grey';
 
 type MessageLayoutProps = {
-  bgcolor: (typeof green)[400] | (typeof grey)[100];
+  bgcolor: (typeof blue)[300] | (typeof grey)[100];
   position: 'left' | 'right';
   children: JSX.Element;
 };

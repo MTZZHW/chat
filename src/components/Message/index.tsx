@@ -1,5 +1,5 @@
 import React from 'react';
-import { green, grey } from '@mui/material/colors';
+import { grey, blue } from '@mui/material/colors';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import type { MessageType } from '../../../types/chat';
@@ -22,7 +22,7 @@ function Message({ message }: MessageProps): JSX.Element {
           {new Date(createdAt).toLocaleString()}
         </Typography>
       </Box>
-      <MessageLayout bgcolor={isUser ? green[400] : grey[100]} position={isUser ? 'right' : 'left'}>
+      <MessageLayout bgcolor={isUser ? blue[300] : grey[100]} position={isUser ? 'right' : 'left'}>
         {isUser ? (
           <Box whiteSpace="pre-wrap">
             <p>{content}</p>
