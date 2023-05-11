@@ -9,7 +9,10 @@ export type ChatsCreateRequestBody = Omit<Chat, 'id' | 'createdAt' | 'updatedAt'
 
 export type ChatsCreateResponseBody = Omit<Chat, 'userId'>;
 
-export type ChatsUpdateRequestBody = Omit<Chat, 'userId' | 'createdAt' | 'updatedAt' | 'label'>;
+export type ChatsUpdateRequestBody = Omit<Chat, 'messages' | 'userId' | 'createdAt' | 'updatedAt' | 'label'> & {
+  messages?: MessageType[];
+  label?: string;
+};
 
 export type ChatsUpdateResponseBody = Omit<Chat, 'userId'>;
 
@@ -53,23 +56,35 @@ const postHandler = async (req: NextApiRequest, res: NextApiResponse<ResponseTyp
 };
 
 const putHandler = async (req: NextApiRequest, res: NextApiResponse<ResponseType<ChatsUpdateResponseBody>>): Promise<void> => {
-  const { id, messages } = req.body as ChatsUpdateRequestBody;
+  const { id, messages, label } = req.body as ChatsUpdateRequestBody;
 
-  let newMessages: MessageType[];
+  if (label) {
+    try {
+      const chat = await ChatDao.update({ label }, { where: { id } });
 
-  try {
-    newMessages = await services.invokeOpenai(messages);
-  } catch (error) {
-    res.status(200).json({ success: false, message: (error as Error).message });
-    return;
+      res.status(200).json({ success: true, message: 'Success', data: chat });
+    } catch (error) {
+      res.status(200).json({ success: false, message: (error as Error).message });
+    }
   }
 
-  try {
-    const chat = await ChatDao.update({ messages: newMessages }, { where: { id } });
+  if (messages) {
+    let newMessages: MessageType[];
 
-    res.status(200).json({ success: true, message: 'Success', data: chat });
-  } catch (error) {
-    res.status(200).json({ success: false, message: (error as Error).message });
+    try {
+      newMessages = await services.invokeOpenai(messages);
+    } catch (error) {
+      res.status(200).json({ success: false, message: (error as Error).message });
+      return;
+    }
+
+    try {
+      const chat = await ChatDao.update({ messages: newMessages }, { where: { id } });
+
+      res.status(200).json({ success: true, message: 'Success', data: chat });
+    } catch (error) {
+      res.status(200).json({ success: false, message: (error as Error).message });
+    }
   }
 };
 

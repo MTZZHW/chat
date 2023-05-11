@@ -5,7 +5,7 @@ import type { MessageType } from '../types/chat';
 import type { ResponseType } from './@types';
 import type { ChatsCreateRequestBody, ChatsCreateResponseBody, ChatsUpdateRequestBody, ChatsUpdateResponseBody } from '@/pages/api/chats';
 import type { ChatsFetchRequestBody, ChatsFetchResponseBody } from '@/pages/api/users/[userId]/chats';
-import type { ChatsDetailFetchRequestBody, ChatsDetailFetchResponseBody } from '@/pages/api/chats/[id]';
+import type { ChatsDeleteRequestBody, ChatsDeleteResponseBody, ChatsDetailFetchRequestBody, ChatsDetailFetchResponseBody } from '@/pages/api/chats/[id]';
 
 const fetchChats = (params: ChatsFetchRequestBody): Promise<ResponseType<ChatsFetchResponseBody>> => {
   return axios.get(process.env.NEXT_PUBLIC_API_SERVER + `/api/users/${params.userId}/chats`).then((response) => {
@@ -27,6 +27,12 @@ const updateChat = (params: ChatsUpdateRequestBody): Promise<ResponseType<ChatsU
 
 const fetchChat = (params: ChatsDetailFetchRequestBody): Promise<ResponseType<ChatsDetailFetchResponseBody>> => {
   return axios.get(process.env.NEXT_PUBLIC_API_SERVER + `/api/chats/${params.id}`).then((response) => {
+    return response.data;
+  });
+};
+
+const deleteChat = (params: ChatsDeleteRequestBody): Promise<ResponseType<ChatsDeleteResponseBody>> => {
+  return axios.delete(process.env.NEXT_PUBLIC_API_SERVER + `/api/chats/${params.id}`).then((response) => {
     return response.data;
   });
 };
@@ -69,6 +75,7 @@ const services = {
   createChat,
   updateChat,
   fetchChat,
+  deleteChat,
   invokeOpenai,
 };
 

@@ -7,10 +7,17 @@ export type ChatsDetailFetchRequestBody = Omit<Chat, 'userId' | 'messages' | 'cr
 
 export type ChatsDetailFetchResponseBody = Omit<Chat, 'userId' | 'createdAt' | 'updatedAt'>;
 
+export type ChatsDeleteRequestBody = Omit<Chat, 'userId' | 'createdAt' | 'updatedAt' | 'messages' | 'label'>;
+
+export type ChatsDeleteResponseBody = undefined;
+
 const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   switch (req.method) {
     case 'GET':
       fetchHandler(req, res);
+      return;
+    case 'DELETE':
+      deleteHandler(req, res);
       return;
     default:
       res.status(405).json({ success: false, message: 'Method Not Allowed' });
@@ -27,6 +34,20 @@ const fetchHandler = async (req: NextApiRequest, res: NextApiResponse<ResponseTy
     });
 
     res.status(200).json({ success: true, message: 'Success', data: chat });
+  } catch (error) {
+    res.status(200).json({ success: false, message: (error as Error).message });
+  }
+};
+
+const deleteHandler = async (req: NextApiRequest, res: NextApiResponse<ResponseType<ChatsDeleteResponseBody>>): Promise<void> => {
+  const { id } = req.query as ChatsDeleteRequestBody;
+
+  try {
+    await ChatDao.delete({
+      where: { id },
+    });
+
+    res.status(200).json({ success: true, message: 'Success' });
   } catch (error) {
     res.status(200).json({ success: false, message: (error as Error).message });
   }

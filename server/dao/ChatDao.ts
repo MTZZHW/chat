@@ -69,4 +69,12 @@ export class ChatDao {
       throw new Error(`${error}`);
     }
   }
+
+  public static async delete(options: Prisma.ChatDeleteArgs): Promise<void> {
+    try {
+      await prisma.chat.delete({ ...options });
+    } catch (error) {
+      throw new Error(`${error}`);
+    }
+  }
 }
