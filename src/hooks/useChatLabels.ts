@@ -48,7 +48,7 @@ function useChatLabels(initialChatLabels: ChatLabelType[]): UseChatLabelsHookTyp
     setChatLabels(newChatLabels);
 
     const { success } = await services.updateChat({
-      id: chatId,
+      id: chatLabelId,
       label: newChatLabel,
     });
 
