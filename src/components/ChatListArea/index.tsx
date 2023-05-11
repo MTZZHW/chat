@@ -10,9 +10,10 @@ const drawerWidth = 256;
 
 type ChatListAreaProps = {
   chatLabels: ChatLabelType[];
+  activeChatId: string;
 };
 
-function ChatListArea({ chatLabels }: ChatListAreaProps): JSX.Element {
+function ChatListArea({ chatLabels, activeChatId }: ChatListAreaProps): JSX.Element {
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
 
   const handleDrawerToggle = (): void => {
@@ -61,7 +62,7 @@ function ChatListArea({ chatLabels }: ChatListAreaProps): JSX.Element {
             '& .MuiDrawer-paper': { boxSizing: 'border-box', width: `${drawerWidth}px` },
           }}
         >
-          <ChatList chatLabels={chatLabels}>
+          <ChatList chatLabels={chatLabels} activeChatId={activeChatId}>
             <Toolbar />
             <Divider />
           </ChatList>
@@ -80,7 +81,7 @@ function ChatListArea({ chatLabels }: ChatListAreaProps): JSX.Element {
           }}
           open
         >
-          <ChatList chatLabels={chatLabels}>
+          <ChatList chatLabels={chatLabels} activeChatId={activeChatId}>
             <NewChatButton />
           </ChatList>
         </Drawer>

@@ -22,12 +22,17 @@ function ChatLayout({ initialChatLabels, initialMessages, initialChatId, user }:
   const [messages, setMessages] = useState<MessageType[]>(initialMessages);
   const [chatId, setChatId] = useState<string>(initialChatId);
 
-  const { chatLabels, addChatLabel } = useChatLabels(initialChatLabels);
+  const { chatLabels, addChatLabel, activeChatId, setActiveChatId } = useChatLabels(initialChatLabels);
 
   useEffect(() => {
     setChatId(initialChatId);
     setMessages(initialMessages);
-  }, [initialChatId, initialMessages]);
+    setActiveChatId(initialChatId);
+  }, [initialChatId]);
+
+  useEffect(() => {
+    setActiveChatId(chatId);
+  }, [chatId]);
 
   const sendConversationRequest = async (chatContent: string): Promise<void> => {
     const newMessages: MessageType[] = [
@@ -82,7 +87,7 @@ function ChatLayout({ initialChatLabels, initialMessages, initialChatId, user }:
         },
       }}
     >
-      <ChatListArea chatLabels={chatLabels} />
+      <ChatListArea chatLabels={chatLabels} activeChatId={activeChatId} />
       <Box
         display="flex"
         flexDirection="column"
