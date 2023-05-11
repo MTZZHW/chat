@@ -7,13 +7,11 @@ import { blue } from '@mui/material/colors';
 import DriveFileRenameOutlinedIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import Stack from '@mui/material/Stack';
-import { useRouter } from 'next/router';
 import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import MuiTextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
-import services from '../../../services';
 import type { ChatLabelType } from '@/hooks/useChatLabels';
 
 const stopPropagation = (event: React.MouseEvent<HTMLDivElement | HTMLButtonElement, MouseEvent>): void => {
@@ -74,14 +72,13 @@ type ChatListProps = {
   chatLabel: ChatLabelType['label'];
   isActiveChat: boolean;
   editChatLabel: (chatLabelId: string, newChatLabel: string) => void;
+  removeChatLabel: (chatId: string) => void;
 };
 
-function ChatListItem({ chatId, chatLabel, isActiveChat, editChatLabel }: ChatListProps): JSX.Element {
+function ChatListItem({ chatId, chatLabel, isActiveChat, editChatLabel, removeChatLabel }: ChatListProps): JSX.Element {
   const [remove, setRemove] = useState<boolean>(false);
   const [edit, setEdit] = useState<boolean>(false);
   const [newChatLabel, setNewChatLabel] = useState<string>('');
-
-  const router = useRouter();
 
   return (
     <ListItem>
@@ -133,10 +130,8 @@ function ChatListItem({ chatId, chatLabel, isActiveChat, editChatLabel }: ChatLi
           {remove ? (
             <ActionButtonGroup
               onOk={async (): Promise<void> => {
-                const { success } = await services.deleteChat({ id: chatId });
-                if (success) {
-                  router.push('/');
-                }
+                removeChatLabel(chatId);
+                setRemove(false);
               }}
               onCancel={(): void => {
                 setRemove(false);

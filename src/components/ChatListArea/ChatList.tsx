@@ -6,10 +6,11 @@ type ChatListProps = {
   chatLabels: ChatLabelType[];
   activeChatId: string;
   editChatLabel: (chatLabelId: string, newChatLabel: string) => void;
+  removeChatLabel: (chatId: string) => void;
   children?: JSX.Element | JSX.Element[];
 };
 
-function ChatList({ chatLabels, activeChatId, editChatLabel, children }: ChatListProps): JSX.Element {
+function ChatList({ chatLabels, activeChatId, editChatLabel, removeChatLabel, children }: ChatListProps): JSX.Element {
   return (
     <List component="nav" disablePadding>
       {children}
@@ -20,6 +21,7 @@ function ChatList({ chatLabels, activeChatId, editChatLabel, children }: ChatLis
           chatLabel={chatLabel.label}
           isActiveChat={chatLabel.id === activeChatId}
           editChatLabel={editChatLabel}
+          removeChatLabel={removeChatLabel}
         />
       ))}
     </List>

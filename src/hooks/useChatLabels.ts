@@ -10,7 +10,7 @@ export type ChatLabelType = {
 type UseChatLabelsHookType = {
   chatLabels: ChatLabelType[];
   addChatLabel: (label: ChatLabelType) => void;
-  removeChatLabel: (label: ChatLabelType) => void;
+  removeChatLabel: (chatId: string) => void;
   editChatLabel: (chatLabelId: string, newChatLabel: string) => void;
   activeChatId: string;
   setActiveChatId: (chatId: string) => void;
@@ -21,18 +21,26 @@ function useChatLabels(initialChatLabels: ChatLabelType[]): UseChatLabelsHookTyp
   const [activeChatId, setActiveChatId] = useState<string>('');
 
   const router = useRouter();
-  const { chatId } = router.query as { chatId: string };
+  const { chatId } = router.query as { chatId?: string };
 
   useEffect(() => {
-    setActiveChatId(chatId);
+    setActiveChatId(chatId || '');
   }, [chatId]);
 
   const addChatLabel = (label: ChatLabelType): void => {
     setChatLabels([...chatLabels, label]);
   };
 
-  const removeChatLabel = (label: ChatLabelType): void => {
-    setChatLabels(chatLabels.filter((l) => l !== label));
+  const removeChatLabel = async (selectedChatId: string): Promise<void> => {
+    const { success } = await services.deleteChat({ id: selectedChatId });
+    if (success) {
+      if (chatId) {
+        router.push('/');
+      } else {
+        setChatLabels(chatLabels.filter((l) => l.id !== selectedChatId));
+        router.reload();
+      }
+    }
   };
 
   const editChatLabel = async (chatLabelId: string, newChatLabel: string): Promise<void> => {

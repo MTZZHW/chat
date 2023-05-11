@@ -22,7 +22,7 @@ function ChatLayout({ initialChatLabels, initialMessages, initialChatId, user }:
   const [messages, setMessages] = useState<MessageType[]>(initialMessages);
   const [chatId, setChatId] = useState<string>(initialChatId);
 
-  const { chatLabels, addChatLabel, editChatLabel, activeChatId, setActiveChatId } = useChatLabels(initialChatLabels);
+  const { chatLabels, addChatLabel, removeChatLabel, editChatLabel, activeChatId, setActiveChatId } = useChatLabels(initialChatLabels);
 
   useEffect(() => {
     setChatId(initialChatId);
@@ -87,7 +87,7 @@ function ChatLayout({ initialChatLabels, initialMessages, initialChatId, user }:
         },
       }}
     >
-      <ChatListArea chatLabels={chatLabels} activeChatId={activeChatId} editChatLabel={editChatLabel} />
+      <ChatListArea chatLabels={chatLabels} activeChatId={activeChatId} removeChatLabel={removeChatLabel} editChatLabel={editChatLabel} />
       <Box
         display="flex"
         flexDirection="column"

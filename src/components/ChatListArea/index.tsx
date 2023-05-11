@@ -12,9 +12,10 @@ type ChatListAreaProps = {
   chatLabels: ChatLabelType[];
   activeChatId: string;
   editChatLabel: (chatLabelId: string, newChatLabel: string) => void;
+  removeChatLabel: (chatId: string) => void;
 };
 
-function ChatListArea({ chatLabels, activeChatId, editChatLabel }: ChatListAreaProps): JSX.Element {
+function ChatListArea({ chatLabels, activeChatId, editChatLabel, removeChatLabel }: ChatListAreaProps): JSX.Element {
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
 
   const handleDrawerToggle = (): void => {
@@ -63,7 +64,7 @@ function ChatListArea({ chatLabels, activeChatId, editChatLabel }: ChatListAreaP
             '& .MuiDrawer-paper': { boxSizing: 'border-box', width: `${drawerWidth}px` },
           }}
         >
-          <ChatList chatLabels={chatLabels} activeChatId={activeChatId} editChatLabel={editChatLabel}>
+          <ChatList chatLabels={chatLabels} activeChatId={activeChatId} editChatLabel={editChatLabel} removeChatLabel={removeChatLabel}>
             <Toolbar />
             <Divider />
           </ChatList>
@@ -82,7 +83,7 @@ function ChatListArea({ chatLabels, activeChatId, editChatLabel }: ChatListAreaP
           }}
           open
         >
-          <ChatList chatLabels={chatLabels} activeChatId={activeChatId} editChatLabel={editChatLabel}>
+          <ChatList chatLabels={chatLabels} activeChatId={activeChatId} editChatLabel={editChatLabel} removeChatLabel={removeChatLabel}>
             <NewChatButton />
           </ChatList>
         </Drawer>
