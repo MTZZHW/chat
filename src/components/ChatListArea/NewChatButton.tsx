@@ -1,13 +1,24 @@
 import React from 'react';
-import Link from 'next/link';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Box from '@mui/material/Box';
 import AddIcon from '@mui/icons-material/Add';
 import IconButton from '@mui/material/IconButton';
+import { useRouter } from 'next/router';
 
 function NewChatButton(): JSX.Element {
+  const router = useRouter();
+
+  const handleClickNewChatButton = (): void => {
+    const { chatId } = router.query as { chatId?: string };
+
+    if (chatId) {
+      router.push('/');
+    } else {
+      router.reload();
+    }
+  };
   return (
     <>
       <Box
@@ -21,11 +32,9 @@ function NewChatButton(): JSX.Element {
           },
         }}
       >
-        <Link href="/" passHref legacyBehavior>
-          <IconButton component="a" color="inherit" edge="end">
-            <AddIcon />
-          </IconButton>
-        </Link>
+        <IconButton color="inherit" edge="end" onClick={handleClickNewChatButton}>
+          <AddIcon />
+        </IconButton>
       </Box>
       <ListItem
         sx={{
@@ -38,13 +47,11 @@ function NewChatButton(): JSX.Element {
           },
         }}
       >
-        <Link href="/" passHref legacyBehavior>
-          <ListItemButton component="a" sx={{ border: '1px dashed grey' }}>
-            <ListItemText primaryTypographyProps={{ fontSize: 14, fontWeight: 'bold' }} sx={{ textAlign: 'center' }}>
-              New Chat
-            </ListItemText>
-          </ListItemButton>
-        </Link>
+        <ListItemButton sx={{ border: '1px dashed grey' }} onClick={handleClickNewChatButton}>
+          <ListItemText primaryTypographyProps={{ fontSize: 14, fontWeight: 'bold' }} sx={{ textAlign: 'center' }}>
+            New Chat
+          </ListItemText>
+        </ListItemButton>
       </ListItem>
     </>
   );
