@@ -68,7 +68,7 @@ const TextField = styled(MuiTextField)({
 });
 
 type ChatListProps = {
-  chatId: ChatLabelType['uid'];
+  chatId: ChatLabelType['uuid'];
   chatLabel: ChatLabelType['label'];
   isActiveChat: boolean;
   editChatLabel: (chatLabelId: string, newChatLabel: string) => void;

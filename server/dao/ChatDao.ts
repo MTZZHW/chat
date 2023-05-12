@@ -8,7 +8,7 @@ export class ChatDao {
       const data = await prisma.chat.findMany({
         select: {
           id: false,
-          uid: true,
+          uuid: true,
           messages: false,
           label: true,
           userId: false,
@@ -32,7 +32,7 @@ export class ChatDao {
       const data = await prisma.chat.findUnique({
         select: {
           id: false,
-          uid: true,
+          uuid: true,
           messages: true,
           label: true,
           userId: false,

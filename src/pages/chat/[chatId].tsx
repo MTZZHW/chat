@@ -13,7 +13,7 @@ import ChatLayout from '@/components/ChatLayout';
 function Chat({ chatLabels, chat, user }: InferGetServerSidePropsType<typeof getServerSideProps>): JSX.Element {
   return (
     <Layout title={`${chat.label} | Chat`}>
-      <ChatLayout initialChatLabels={chatLabels} initialMessages={chat.messages} initialChatId={chat.uid} user={user} />
+      <ChatLayout initialChatLabels={chatLabels} initialMessages={chat.messages} initialChatId={chat.uuid} user={user} />
     </Layout>
   );
 }
@@ -40,7 +40,7 @@ export const getServerSideProps: GetServerSideProps<
   });
 
   const chat = await ChatDao.findOneRaw({
-    where: { uid: params!.chatId },
+    where: { uuid: params!.chatId },
   });
 
   return {

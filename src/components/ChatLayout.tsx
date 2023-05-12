@@ -55,13 +55,13 @@ function ChatLayout({ initialChatLabels, initialMessages, initialChatId, user }:
       });
 
       if (success && data) {
-        addChatLabel({ uid: data.uid, label: data.label });
+        addChatLabel({ uuid: data.uuid, label: data.label });
         setMessages(data.messages);
-        setChatId(data.uid);
+        setChatId(data.uuid);
       }
     } else {
       const { success, data } = await services.updateChat({
-        uid: chatId,
+        uuid: chatId,
         messages: newMessages,
       });
 

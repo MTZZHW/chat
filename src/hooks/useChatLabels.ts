@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import services from '../../services';
 
 export type ChatLabelType = {
-  uid: string;
+  uuid: string;
   label: string;
 };
 
@@ -32,12 +32,12 @@ function useChatLabels(initialChatLabels: ChatLabelType[]): UseChatLabelsHookTyp
   };
 
   const removeChatLabel = async (selectedChatId: string): Promise<void> => {
-    const { success } = await services.deleteChat({ uid: selectedChatId });
+    const { success } = await services.deleteChat({ uuid: selectedChatId });
     if (success) {
       if (chatId) {
         router.push('/');
       } else {
-        setChatLabels(chatLabels.filter((l) => l.uid !== selectedChatId));
+        setChatLabels(chatLabels.filter((l) => l.uuid !== selectedChatId));
         router.reload();
       }
     }
@@ -45,7 +45,7 @@ function useChatLabels(initialChatLabels: ChatLabelType[]): UseChatLabelsHookTyp
 
   const editChatLabel = async (chatLabelId: string, newChatLabel: string): Promise<void> => {
     const newChatLabels = chatLabels.map((label) => {
-      if (label.uid === chatLabelId) {
+      if (label.uuid === chatLabelId) {
         return {
           ...label,
           label: newChatLabel,
@@ -56,7 +56,7 @@ function useChatLabels(initialChatLabels: ChatLabelType[]): UseChatLabelsHookTyp
     setChatLabels(newChatLabels);
 
     const { success } = await services.updateChat({
-      uid: chatLabelId,
+      uuid: chatLabelId,
       label: newChatLabel,
     });
 

@@ -16,10 +16,10 @@ function ChatList({ chatLabels, activeChatId, editChatLabel, removeChatLabel, ch
       {children}
       {chatLabels.map((chatLabel) => (
         <ChatListItem
-          key={chatLabel.uid}
-          chatId={chatLabel.uid}
+          key={chatLabel.uuid}
+          chatId={chatLabel.uuid}
           chatLabel={chatLabel.label}
-          isActiveChat={chatLabel.uid === activeChatId}
+          isActiveChat={chatLabel.uuid === activeChatId}
           editChatLabel={editChatLabel}
           removeChatLabel={removeChatLabel}
         />

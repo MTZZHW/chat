@@ -26,11 +26,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void>
 };
 
 const fetchHandler = async (req: NextApiRequest, res: NextApiResponse<ResponseType<ChatsDetailFetchResponseBody>>): Promise<void> => {
-  const { uid } = req.query as ChatsDetailFetchRequestBody;
+  const { uuid } = req.query as ChatsDetailFetchRequestBody;
 
   try {
     const chat = await ChatDao.findOneRaw({
-      where: { uid },
+      where: { uuid },
     });
 
     res.status(200).json({ success: true, message: 'Success', data: chat });
@@ -40,11 +40,11 @@ const fetchHandler = async (req: NextApiRequest, res: NextApiResponse<ResponseTy
 };
 
 const deleteHandler = async (req: NextApiRequest, res: NextApiResponse<ResponseType<ChatsDeleteResponseBody>>): Promise<void> => {
-  const { uid } = req.query as ChatsDeleteRequestBody;
+  const { uuid } = req.query as ChatsDeleteRequestBody;
 
   try {
     await ChatDao.delete({
-      where: { uid },
+      where: { uuid },
     });
 
     res.status(200).json({ success: true, message: 'Success' });
