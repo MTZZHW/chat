@@ -5,11 +5,11 @@ import type { ResponseType } from '../../../../services/@types';
 import type { MessageType } from '../../../../types/chat';
 import services from '../../../../services';
 
-export type ChatsCreateRequestBody = Omit<Chat, 'id' | 'createdAt' | 'updatedAt' | 'label' | 'userId'> & Record<'userId', string>;
+export type ChatsCreateRequestBody = Omit<Chat, 'id' | 'uid' | 'createdAt' | 'updatedAt' | 'label' | 'userId'> & Record<'userId', string>;
 
 export type ChatsCreateResponseBody = Omit<Chat, 'userId'>;
 
-export type ChatsUpdateRequestBody = Omit<Chat, 'messages' | 'userId' | 'createdAt' | 'updatedAt' | 'label'> & {
+export type ChatsUpdateRequestBody = Omit<Chat, 'id' | 'messages' | 'userId' | 'createdAt' | 'updatedAt' | 'label'> & {
   messages?: MessageType[];
   label?: string;
 };
@@ -56,11 +56,11 @@ const postHandler = async (req: NextApiRequest, res: NextApiResponse<ResponseTyp
 };
 
 const putHandler = async (req: NextApiRequest, res: NextApiResponse<ResponseType<ChatsUpdateResponseBody>>): Promise<void> => {
-  const { id, messages, label } = req.body as ChatsUpdateRequestBody;
+  const { uid, messages, label } = req.body as ChatsUpdateRequestBody;
 
   if (label) {
     try {
-      const chat = await ChatDao.update({ label }, { where: { id } });
+      const chat = await ChatDao.update({ label }, { where: { uid } });
 
       res.status(200).json({ success: true, message: 'Success', data: chat });
     } catch (error) {
@@ -79,7 +79,7 @@ const putHandler = async (req: NextApiRequest, res: NextApiResponse<ResponseType
     }
 
     try {
-      const chat = await ChatDao.update({ messages: newMessages }, { where: { id } });
+      const chat = await ChatDao.update({ messages: newMessages }, { where: { uid } });
 
       res.status(200).json({ success: true, message: 'Success', data: chat });
     } catch (error) {

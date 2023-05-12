@@ -26,13 +26,13 @@ const updateChat = (params: ChatsUpdateRequestBody): Promise<ResponseType<ChatsU
 };
 
 const fetchChat = (params: ChatsDetailFetchRequestBody): Promise<ResponseType<ChatsDetailFetchResponseBody>> => {
-  return axios.get(process.env.NEXT_PUBLIC_API_SERVER + `/api/chats/${params.id}`).then((response) => {
+  return axios.get(process.env.NEXT_PUBLIC_API_SERVER + `/api/chats/${params.uid}`).then((response) => {
     return response.data;
   });
 };
 
 const deleteChat = (params: ChatsDeleteRequestBody): Promise<ResponseType<ChatsDeleteResponseBody>> => {
-  return axios.delete(process.env.NEXT_PUBLIC_API_SERVER + `/api/chats/${params.id}`).then((response) => {
+  return axios.delete(process.env.NEXT_PUBLIC_API_SERVER + `/api/chats/${params.uid}`).then((response) => {
     return response.data;
   });
 };

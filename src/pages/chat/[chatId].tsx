@@ -13,13 +13,13 @@ import ChatLayout from '@/components/ChatLayout';
 function Chat({ chatLabels, chat, user }: InferGetServerSidePropsType<typeof getServerSideProps>): JSX.Element {
   return (
     <Layout title={`${chat.label} | Chat`}>
-      <ChatLayout initialChatLabels={chatLabels} initialMessages={chat.messages} initialChatId={chat.id} user={user} />
+      <ChatLayout initialChatLabels={chatLabels} initialMessages={chat.messages} initialChatId={chat.uid} user={user} />
     </Layout>
   );
 }
 
 export const getServerSideProps: GetServerSideProps<
-  { chatLabels: ChatLabelType[]; chat: Omit<ChatType, 'userId' | 'createdAt' | 'updatedAt'>; user: UserType },
+  { chatLabels: ChatLabelType[]; chat: Omit<ChatType, 'id' | 'userId' | 'createdAt' | 'updatedAt'>; user: UserType },
   { chatId: string }
 > = async ({ req, res, params }) => {
   const session = await getServerSession<AuthOptions, { user: UserType; expires: ISODateString }>(req, res, authOptions);
@@ -40,7 +40,7 @@ export const getServerSideProps: GetServerSideProps<
   });
 
   const chat = await ChatDao.findOneRaw({
-    where: { id: params!.chatId },
+    where: { uid: params!.chatId },
   });
 
   return {

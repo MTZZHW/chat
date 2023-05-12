@@ -5,7 +5,7 @@ import { ChatDao } from '../../../../../server/dao';
 
 export type ChatsFetchRequestBody = Omit<Chat, 'id' | 'messages' | 'createdAt' | 'updatedAt' | 'label' | 'userId'> & Record<'userId', string>;
 
-export type ChatsFetchResponseBody = Omit<Chat, 'userId' | 'messages' | 'createdAt' | 'updatedAt'>[];
+export type ChatsFetchResponseBody = Omit<Chat, 'id' | 'userId' | 'messages' | 'createdAt' | 'updatedAt'>[];
 
 const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   switch (req.method) {
