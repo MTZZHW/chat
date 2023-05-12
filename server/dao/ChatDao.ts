@@ -15,6 +15,9 @@ export class ChatDao {
           createdAt: false,
           updatedAt: false,
         },
+        orderBy: {
+          id: 'desc',
+        },
         ...options,
       });
 

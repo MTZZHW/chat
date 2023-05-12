@@ -28,7 +28,7 @@ function useChatLabels(initialChatLabels: ChatLabelType[]): UseChatLabelsHookTyp
   }, [chatId]);
 
   const addChatLabel = (label: ChatLabelType): void => {
-    setChatLabels([...chatLabels, label]);
+    setChatLabels([label, ...chatLabels]);
   };
 
   const removeChatLabel = async (selectedChatId: string): Promise<void> => {
